@@ -6,10 +6,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/arwen"
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/config"
-	contextmock "github.com/ElrondNetwork/arwen-wasm-vm/v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/arwen-wasm-vm/v1_3/mock/world"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
+	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
+	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
 	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/stretchr/testify/require"
 )

@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/arwen"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	"github.com/stretchr/testify/require"
 )
 
