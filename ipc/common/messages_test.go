@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/ipc/marshaling"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
 	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/stretchr/testify/require"
 )

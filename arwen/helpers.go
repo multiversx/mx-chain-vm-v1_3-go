@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"unsafe"
 
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/crypto"
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/math"
-	"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/wasmer"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/crypto"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 )
 
