@@ -132,7 +132,7 @@ func (a *Account) GetTokenData(tokenKey []byte) (*esdt.ESDigitalToken, error) {
 		},
 	}
 
-	marshaledData, err := a.AccountDataHandler().RetrieveValue(tokenKey)
+	marshaledData, _, err := a.AccountDataHandler().RetrieveValue(tokenKey)
 	if err != nil || len(marshaledData) == 0 {
 		return esdtData, nil
 	}
@@ -208,7 +208,7 @@ func (a *Account) GetTokenRoles(tokenName []byte) ([][]byte, error) {
 		Roles: make([][]byte, 0),
 	}
 
-	marshaledData, err := a.AccountDataHandler().RetrieveValue(tokenRolesKey)
+	marshaledData, _, err := a.AccountDataHandler().RetrieveValue(tokenRolesKey)
 	if err != nil || len(marshaledData) == 0 {
 		return tokenRolesData.Roles, nil
 	}

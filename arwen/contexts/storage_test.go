@@ -6,11 +6,11 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
 	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
 	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/stretchr/testify/require"
 )
 
@@ -279,8 +279,8 @@ func TestStorageContext_GetStorageFromAddress(t *testing.T) {
 			}
 			return nil, nil
 		},
-		GetStorageDataCalled: func(accountsAddress []byte, index []byte) ([]byte, error) {
-			return internalData, nil
+		GetStorageDataCalled: func(accountsAddress []byte, index []byte) ([]byte, uint32, error) {
+			return internalData, 0, nil
 		},
 	}
 

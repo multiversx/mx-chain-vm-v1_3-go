@@ -15,7 +15,7 @@ func (part *NodePart) replyToBlockchainNewAddress(request common.MessageHandler)
 
 func (part *NodePart) replyToBlockchainGetStorageData(request common.MessageHandler) common.MessageHandler {
 	typedRequest := request.(*common.MessageBlockchainGetStorageDataRequest)
-	data, err := part.blockchain.GetStorageData(typedRequest.AccountAddress, typedRequest.Index)
+	data, _, err := part.blockchain.GetStorageData(typedRequest.AccountAddress, typedRequest.Index)
 
 	response := common.NewMessageBlockchainGetStorageDataResponse(data, err)
 	return response
