@@ -4,6 +4,7 @@ import (
 	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
 	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
+	"github.com/ElrondNetwork/elrond-vm-common/mock"
 )
 
 // WorldMarshalizer is the global marshalizer to be used by the components of
@@ -29,17 +30,14 @@ func NewBuiltinFunctionsWrapper(
 	dnsMap := makeDNSAddresses(numDNSAddresses)
 
 	argsBuiltIn := builtInFunctions.ArgsCreateBuiltInFunctionContainer{
-		GasMap:                            gasMap,
-		MapDNSAddresses:                   dnsMap,
-		Marshalizer:                       WorldMarshalizer,
-		Accounts:                          world.AccountsAdapter,
-		ShardCoordinator:                  world,
-		EpochNotifier:                     &EpochNotifierStub{},
-		SaveNFTToSystemAccountEnableEpoch: 100,
-		MaxNumOfAddressesForTransferRole:  100,
-		FixAsyncCallbackCheckEnableEpoch:  100,
-		CheckFunctionArgumentEnableEpoch:  100,
-		GuardedAccountHandler:             world.GuardedAccountHandler,
+		GasMap:                           gasMap,
+		MapDNSAddresses:                  dnsMap,
+		Marshalizer:                      WorldMarshalizer,
+		Accounts:                         world.AccountsAdapter,
+		ShardCoordinator:                 world,
+		EnableEpochsHandler:              &mock.EnableEpochsHandlerStub{},
+		GuardedAccountHandler:            world.GuardedAccountHandler,
+		MaxNumOfAddressesForTransferRole: 100,
 	}
 
 	builtinFuncFactory, err := builtInFunctions.NewBuiltInFunctionsCreator(argsBuiltIn)

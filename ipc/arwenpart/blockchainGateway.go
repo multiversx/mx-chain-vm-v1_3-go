@@ -1,9 +1,9 @@
 package arwenpart
 
 import (
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
 	"github.com/ElrondNetwork/elrond-go-core/data/esdt"
 	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
 )
 
 var _ vmcommon.BlockchainHook = (*BlockchainHookGateway)(nil)
@@ -36,20 +36,20 @@ func (blockchain *BlockchainHookGateway) NewAddress(creatorAddress []byte, creat
 }
 
 // GetStorageData forwards a message to the actual hook
-func (blockchain *BlockchainHookGateway) GetStorageData(accountAddress []byte, index []byte) ([]byte, error) {
+func (blockchain *BlockchainHookGateway) GetStorageData(accountAddress []byte, index []byte) ([]byte, uint32, error) {
 
 	request := common.NewMessageBlockchainGetStorageDataRequest(accountAddress, index)
 	rawResponse, err := blockchain.messenger.SendHookCallRequest(request)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	if rawResponse.GetKind() != common.BlockchainGetStorageDataResponse {
-		return nil, common.ErrBadHookResponseFromNode
+		return nil, 0, common.ErrBadHookResponseFromNode
 	}
 
 	response := rawResponse.(*common.MessageBlockchainGetStorageDataResponse)
-	return response.Data, response.GetError()
+	return response.Data, 0, response.GetError()
 }
 
 // GetBlockhash forwards a message to the actual hook
