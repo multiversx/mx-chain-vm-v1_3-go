@@ -1,9 +1,9 @@
 package contracts
 
 import (
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen/elrondapi"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen/elrondapi"
 )
 
 // DirectCallGasTestConfig is configuration for direct call tests

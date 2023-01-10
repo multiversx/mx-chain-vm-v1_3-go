@@ -8,11 +8,11 @@ import (
 	"math/big"
 	"unsafe"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	vmcommon "github.com/ElrondNetwork/elrond-vm-common"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 var logRuntime = logger.GetOrCreate("arwen/runtime")

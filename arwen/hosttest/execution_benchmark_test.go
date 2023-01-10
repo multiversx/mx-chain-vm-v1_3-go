@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
-	gasSchedules "github.com/ElrondNetwork/wasm-vm-v1_3/arwenmandos/gasSchedules"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	testcommon "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
+	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/arwenmandos/gasSchedules"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 
@@ -92,11 +92,11 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.
 	require.Nil(tb, err)
 
 	host, err := arwenHost.NewArwenVM(mockWorld, &arwen.VMHostParameters{
-		VMType:                   testcommon.DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasMap,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
+		VMType:               testcommon.DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasMap,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("ELROND"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,

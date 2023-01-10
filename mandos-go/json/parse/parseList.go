@@ -3,8 +3,8 @@ package mandosjsonparse
 import (
 	"errors"
 
-	mj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/json/model"
-	oj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/orderedjson"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/model"
+	oj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/orderedjson"
 )
 
 func (p *Parser) processStringList(obj interface{}) ([]string, error) {

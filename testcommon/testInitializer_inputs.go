@@ -12,16 +12,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	vmcommon "github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/require"
 )
 
@@ -305,12 +305,12 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	require.Nil(tb, err)
 
 	host, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     world.BuiltinFuncs.Container,
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
-		UseWarmInstance:          false,
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: world.BuiltinFuncs.Container,
+		ProtectedKeyPrefix:   []byte("ELROND"),
+		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
@@ -332,12 +332,12 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.V
 	}
 
 	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
-		UseWarmInstance:          false,
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("ELROND"),
+		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
@@ -363,11 +363,11 @@ func DefaultTestArwenWithGasSchedule(
 	}
 
 	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("ELROND"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsStorageAPICostOptimizationFlagEnabledField:         true,
 			IsMultiESDTTransferFixOnCallBackFlagEnabledField:     true,

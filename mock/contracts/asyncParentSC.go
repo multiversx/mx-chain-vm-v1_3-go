@@ -6,10 +6,10 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-vm-common/txDataBuilder"
+	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 

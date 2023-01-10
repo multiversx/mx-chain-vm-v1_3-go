@@ -3,12 +3,12 @@ package mock
 import (
 	"math/big"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/crypto"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/crypto"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 var _ arwen.VMHost = (*VMHostStub)(nil)

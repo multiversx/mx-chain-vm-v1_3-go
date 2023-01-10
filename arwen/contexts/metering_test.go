@@ -4,12 +4,12 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	"github.com/stretchr/testify/require"
 )
 

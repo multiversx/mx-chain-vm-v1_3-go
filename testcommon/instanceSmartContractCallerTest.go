@@ -3,9 +3,9 @@ package testcommon
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 )
 
 // InstanceTestSmartContract represents the config data for the smart contract instance to be tested

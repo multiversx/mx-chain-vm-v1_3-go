@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/marshaling"
 )
 
 // Receiver intermediates communication (message receiving) via pipes

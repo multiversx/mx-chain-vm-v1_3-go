@@ -3,7 +3,7 @@ package orderedjson2kast
 import (
 	"path/filepath"
 
-	oj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/orderedjson"
+	oj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/orderedjson"
 )
 
 // ProcessCodeFunc represents a callback to assemble the code in the test

@@ -4,7 +4,7 @@ import (
 	"math/big"
 	"testing"
 
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 
