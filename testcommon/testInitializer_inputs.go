@@ -17,8 +17,8 @@ import (
 	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
-	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
@@ -304,7 +304,7 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	err := world.InitBuiltinFunctions(gasSchedule)
 	require.Nil(tb, err)
 
-	host, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
+	host, err := arwenHost.NewVMHost(world, &arwen.VMHostParameters{
 		VMType:               DefaultVMType,
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
@@ -331,7 +331,7 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.V
 		gasSchedule = config.MakeGasMapForTests()
 	}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
+	host, err := arwenHost.NewVMHost(blockchain, &arwen.VMHostParameters{
 		VMType:               DefaultVMType,
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
@@ -362,7 +362,7 @@ func DefaultTestArwenWithGasSchedule(
 		gasSchedule = config.MakeGasMapForTests()
 	}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
+	host, err := arwenHost.NewVMHost(blockchain, &arwen.VMHostParameters{
 		VMType:               DefaultVMType,
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,

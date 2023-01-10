@@ -8,7 +8,7 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/arwenpart"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
