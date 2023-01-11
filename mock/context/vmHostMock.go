@@ -5,7 +5,7 @@ import (
 
 	"github.com/multiversx/mx-chain-core-go/data/vm"
 	"github.com/multiversx/mx-chain-vm-common-go"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/crypto"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"

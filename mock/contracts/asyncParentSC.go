@@ -7,7 +7,7 @@ import (
 	"math/big"
 
 	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
