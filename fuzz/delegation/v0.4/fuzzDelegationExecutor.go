@@ -8,11 +8,11 @@ import (
 	"strings"
 
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
-	am "github.com/multiversx/mx-chain-vm-v1_3-go/arwenmandos"
-	fr "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/fileresolver"
-	mj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/model"
-	mjparse "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/parse"
-	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/write"
+	am "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec"
+	fr "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/fileresolver"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
+	mjparse "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/parse"
+	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/write"
 	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 

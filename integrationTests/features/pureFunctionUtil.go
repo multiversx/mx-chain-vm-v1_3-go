@@ -13,7 +13,7 @@ import (
 	arwen "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
-	mj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/model"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/require"
 )
