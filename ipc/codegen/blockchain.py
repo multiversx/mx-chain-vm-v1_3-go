@@ -260,7 +260,7 @@ def generate_reply_slots(args):
 
 
 def generate_gateway(args):
-    package = "arwenpart"
+    package = "vmpart"
     print("package " + package)
     print("""
 

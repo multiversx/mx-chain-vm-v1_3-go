@@ -10,7 +10,7 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/arwenpart"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/vmpart"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/marshaling"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/nodepart"
@@ -83,7 +83,7 @@ func doContractRequest(
 			},
 		}
 
-		part, err := arwenpart.NewArwenPart(
+		part, err := vmpart.NewArwenPart(
 			"testversion",
 			files.inputOfArwen,
 			files.outputOfArwen,
