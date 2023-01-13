@@ -309,7 +309,7 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: world.BuiltinFuncs.Container,
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
@@ -336,7 +336,7 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.V
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
@@ -367,7 +367,7 @@ func DefaultTestArwenWithGasSchedule(
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsStorageAPICostOptimizationFlagEnabledField:         true,
 			IsMultiESDTTransferFixOnCallBackFlagEnabledField:     true,

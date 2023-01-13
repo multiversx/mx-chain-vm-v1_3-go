@@ -55,7 +55,7 @@ func getHostParameters() *arwen.VMHostParameters {
 		VMType:               []byte{5, 0},
 		BlockGasLimit:        uint64(10000000),
 		GasSchedule:          config.MakeGasMap(1, 1),
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
