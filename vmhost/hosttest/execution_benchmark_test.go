@@ -10,11 +10,11 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
+	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
-	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
-	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 

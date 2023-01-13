@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/multiversx/mx-chain-vm-common-go"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

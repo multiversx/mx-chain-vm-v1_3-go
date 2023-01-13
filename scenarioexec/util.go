@@ -9,9 +9,9 @@ import (
 	"github.com/multiversx/mx-chain-core-go/data/esdt"
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 func convertAccount(testAcct *mj.Account, world *worldmock.MockWorld) (*worldmock.Account, error) {

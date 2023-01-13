@@ -9,10 +9,10 @@ import (
 	"github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/data/esdt"
 	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	oj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/orderedjson"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 // ExecuteCheckStateStep executes a CheckStateStep defined by the current scenario.

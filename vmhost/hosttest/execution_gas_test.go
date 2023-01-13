@@ -10,10 +10,10 @@ import (
 	"github.com/multiversx/mx-chain-core-go/data/vm"
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/mock/contracts"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/stretchr/testify/require"
 )
 

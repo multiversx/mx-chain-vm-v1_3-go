@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/multiversx/mx-chain-core-go/core"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/write"
 	oj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/orderedjson"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 const includeElrondProtectedStorage = false

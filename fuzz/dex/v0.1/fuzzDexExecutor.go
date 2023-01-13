@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	am "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec"
 	fr "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/fileresolver"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	mjparse "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/parse"
 	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/write"
-	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"io/ioutil"
 )
 
@@ -63,11 +63,11 @@ type FarmerInfo struct {
 }
 
 type fuzzDexExecutor struct {
-	arwenTestExecutor *am.ArwenTestExecutor
-	world             *worldhook.MockWorld
-	vm                vmi.VMExecutionHandler
-	mandosParser      mjparse.Parser
-	txIndex           int
+	vmTestExecutor *am.ArwenTestExecutor
+	world          *worldhook.MockWorld
+	vm             vmi.VMExecutionHandler
+	mandosParser   mjparse.Parser
+	txIndex        int
 
 	wegldTokenId            string
 	mexTokenId              string
@@ -140,7 +140,7 @@ type eventsStatistics struct {
 }
 
 func newFuzzDexExecutor(fileResolver fr.FileResolver) (*fuzzDexExecutor, error) {
-	arwenTestExecutor, err := am.NewArwenTestExecutor()
+	vmTestExecutor, err := am.NewArwenTestExecutor()
 	if err != nil {
 		return nil, err
 	}
@@ -148,11 +148,11 @@ func newFuzzDexExecutor(fileResolver fr.FileResolver) (*fuzzDexExecutor, error) 
 	parser := mjparse.NewParser(fileResolver)
 
 	return &fuzzDexExecutor{
-		arwenTestExecutor: arwenTestExecutor,
-		world:             arwenTestExecutor.World,
-		vm:                arwenTestExecutor.GetVM(),
-		mandosParser:      parser,
-		txIndex:           0,
+		vmTestExecutor: vmTestExecutor,
+		world:          vmTestExecutor.World,
+		vm:             vmTestExecutor.GetVM(),
+		mandosParser:   parser,
+		txIndex:        0,
 		generatedScenario: &mj.Scenario{
 			Name: "fuzz generated",
 		},
@@ -175,7 +175,7 @@ func (pfe *fuzzDexExecutor) executeStep(stepSnippet string) error {
 	}
 
 	pfe.addStep(step)
-	return pfe.arwenTestExecutor.ExecuteStep(step)
+	return pfe.vmTestExecutor.ExecuteStep(step)
 }
 
 func (pfe *fuzzDexExecutor) addStep(step mj.Step) {
@@ -195,7 +195,7 @@ func (pfe *fuzzDexExecutor) executeTxStep(stepSnippet string) (*vmi.VMOutput, er
 
 	pfe.addStep(step)
 
-	return pfe.arwenTestExecutor.ExecuteTxStep(txStep)
+	return pfe.vmTestExecutor.ExecuteTxStep(txStep)
 }
 
 func (pfe *fuzzDexExecutor) log(info string, args ...interface{}) {
