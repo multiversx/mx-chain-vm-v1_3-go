@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 
-	"github.com/ElrondNetwork/elrond-go-core/core/check"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
+	"github.com/multiversx/mx-chain-core-go/core/check"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
 )
 
 var logStorage = logger.GetOrCreate("arwen/storage")
@@ -18,7 +18,7 @@ type storageContext struct {
 	blockChainHook                vmcommon.BlockchainHook
 	address                       []byte
 	stateStack                    [][]byte
-	elrondProtectedKeyPrefix      []byte
+	ProtectedKeyPrefix            []byte
 	arwenStorageProtectionEnabled bool
 }
 
@@ -26,16 +26,16 @@ type storageContext struct {
 func NewStorageContext(
 	host arwen.VMHost,
 	blockChainHook vmcommon.BlockchainHook,
-	elrondProtectedKeyPrefix []byte,
+	protectedKeyPrefix []byte,
 ) (*storageContext, error) {
-	if len(elrondProtectedKeyPrefix) == 0 {
-		return nil, errors.New("elrondProtectedKeyPrefix cannot be empty")
+	if len(protectedKeyPrefix) == 0 {
+		return nil, errors.New("ProtectedKeyPrefix cannot be empty")
 	}
 	context := &storageContext{
 		host:                          host,
 		blockChainHook:                blockChainHook,
 		stateStack:                    make([][]byte, 0),
-		elrondProtectedKeyPrefix:      elrondProtectedKeyPrefix,
+		ProtectedKeyPrefix:            protectedKeyPrefix,
 		arwenStorageProtectionEnabled: true,
 	}
 
@@ -190,7 +190,7 @@ func (context *storageContext) isArwenProtectedKey(key []byte) bool {
 }
 
 func (context *storageContext) isElrondReservedKey(key []byte) bool {
-	return bytes.HasPrefix(key, context.elrondProtectedKeyPrefix)
+	return bytes.HasPrefix(key, context.ProtectedKeyPrefix)
 }
 
 func (context *storageContext) SetProtectedStorage(key []byte, value []byte) (arwen.StorageStatus, error) {

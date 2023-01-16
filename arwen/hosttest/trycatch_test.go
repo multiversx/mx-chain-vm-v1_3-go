@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
+	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
 	"github.com/stretchr/testify/assert"
 )
 

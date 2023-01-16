@@ -55,10 +55,10 @@ import (
 	"math/big"
 	"unsafe"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
-	twos "github.com/ElrondNetwork/big-int-util/twos-complement"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
+	twos "github.com/multiversx/mx-components-big-int/twos-complement"
 )
 
 // BigIntImports creates a new wasmer.Imports populated with the BigInt API methods

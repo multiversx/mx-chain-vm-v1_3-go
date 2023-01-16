@@ -3,10 +3,10 @@ package testcommon
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 type testTemplateConfig struct {

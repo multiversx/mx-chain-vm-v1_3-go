@@ -1,7 +1,7 @@
 package contexts
 
 import (
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 type wasmerInstanceBuilder struct {

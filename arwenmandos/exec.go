@@ -3,18 +3,19 @@ package arwenmandos
 import (
 	"fmt"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
-	gasSchedules "github.com/ElrondNetwork/wasm-vm-v1_3/arwenmandos/gasSchedules"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	mc "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/controller"
-	er "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/expression/reconstructor"
-	fr "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/fileresolver"
-	mj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/json/model"
-	worldhook "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	vmi "github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	"github.com/multiversx/mx-chain-core-go/core"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	vmi "github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
+	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/arwenmandos/gasSchedules"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	mc "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/controller"
+	er "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/expression/reconstructor"
+	fr "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/fileresolver"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/model"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 var log = logger.GetOrCreate("arwen/mandos")
@@ -47,11 +48,11 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
-		VMType:                   TestVMType,
-		BlockGasLimit:            blockGasLimit,
-		GasSchedule:              gasScheduleMap,
-		BuiltInFuncContainer:     world.BuiltinFuncs.Container,
-		ElrondProtectedKeyPrefix: []byte(ElrondProtectedKeyPrefix),
+		VMType:               TestVMType,
+		BlockGasLimit:        blockGasLimit,
+		GasSchedule:          gasScheduleMap,
+		BuiltInFuncContainer: world.BuiltinFuncs.Container,
+		ProtectedKeyPrefix:   []byte(core.ProtectedKeyPrefix),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,

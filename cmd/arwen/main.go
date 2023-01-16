@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/arwenpart"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
-	"github.com/ElrondNetwork/elrond-go-logger/pipes"
+	"github.com/multiversx/mx-chain-logger-go/pipes"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/arwenpart"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/marshaling"
 )
 
 const (

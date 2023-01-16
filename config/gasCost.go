@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
+import "github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 
 type GasCost struct {
 	BaseOperationCost BaseOperationCost

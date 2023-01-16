@@ -5,17 +5,17 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/arwenpart"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/nodepart"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/arwenpart"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/marshaling"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/nodepart"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -70,11 +70,11 @@ func doContractRequest(
 
 	go func() {
 		vmHostParameters := &arwen.VMHostParameters{
-			VMType:                   []byte{5, 0},
-			BlockGasLimit:            uint64(10000000),
-			GasSchedule:              config.MakeGasMapForTests(),
-			ElrondProtectedKeyPrefix: []byte("ELROND"),
-			BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
+			VMType:               []byte{5, 0},
+			BlockGasLimit:        uint64(10000000),
+			GasSchedule:          config.MakeGasMapForTests(),
+			ProtectedKeyPrefix:   []byte("ELROND"),
+			BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 			EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 				IsSCDeployFlagEnabledField:            true,
 				IsAheadOfTimeGasUsageFlagEnabledField: true,

@@ -3,9 +3,9 @@ package mock
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 // InstanceBuilderMock can be passed to RuntimeContext as an InstanceBuilder to

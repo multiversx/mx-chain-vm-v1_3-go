@@ -3,7 +3,7 @@ package dex
 import (
 	"math/big"
 
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 func (pfe *fuzzDexExecutor) interpretExpr(expression string) []byte {

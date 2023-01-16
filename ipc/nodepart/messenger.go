@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/marshaling"
 )
 
 // NodeMessenger is the messenger on Node's part of the pipe

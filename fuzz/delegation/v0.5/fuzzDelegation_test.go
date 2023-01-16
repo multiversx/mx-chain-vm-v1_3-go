@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	roulette "github.com/ElrondNetwork/wasm-vm-v1_3/fuzz/weightedroulette"
-	mc "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/controller"
+	roulette "github.com/multiversx/mx-chain-vm-v1_3-go/fuzz/weightedroulette"
+	mc "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/controller"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

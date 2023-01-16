@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
 )
 
 func (driver *ArwenDriver) getArwenPath() (string, error) {

@@ -3,16 +3,16 @@ package tests
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/nodepart"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/nodepart"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/require"
 )
 
@@ -108,11 +108,11 @@ func newDriver(tb testing.TB, blockchain *contextmock.BlockchainHookStub) *nodep
 		blockchain,
 		common.ArwenArguments{
 			VMHostParameters: arwen.VMHostParameters{
-				VMType:                   arwenVirtualMachine,
-				BlockGasLimit:            uint64(10000000),
-				GasSchedule:              config.MakeGasMapForTests(),
-				ElrondProtectedKeyPrefix: []byte("ELROND"),
-				BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
+				VMType:               arwenVirtualMachine,
+				BlockGasLimit:        uint64(10000000),
+				GasSchedule:          config.MakeGasMapForTests(),
+				ProtectedKeyPrefix:   []byte("ELROND"),
+				BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 				EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 					IsSCDeployFlagEnabledField:            true,
 					IsAheadOfTimeGasUsageFlagEnabledField: true,

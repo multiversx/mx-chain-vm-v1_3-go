@@ -6,14 +6,14 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/mock/contracts"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-go-core/core"
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/txDataBuilder"
+	"github.com/multiversx/mx-chain-core-go/core"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/mock/contracts"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 

@@ -8,14 +8,14 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	testcommon "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 

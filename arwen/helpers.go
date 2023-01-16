@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"unsafe"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/crypto"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/math"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/crypto"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 // Zero is the big integer 0
