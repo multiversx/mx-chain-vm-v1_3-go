@@ -26,16 +26,16 @@ type storageContext struct {
 func NewStorageContext(
 	host arwen.VMHost,
 	blockChainHook vmcommon.BlockchainHook,
-	ProtectedKeyPrefix []byte,
+	protectedKeyPrefix []byte,
 ) (*storageContext, error) {
-	if len(ProtectedKeyPrefix) == 0 {
+	if len(protectedKeyPrefix) == 0 {
 		return nil, errors.New("ProtectedKeyPrefix cannot be empty")
 	}
 	context := &storageContext{
 		host:                          host,
 		blockChainHook:                blockChainHook,
 		stateStack:                    make([][]byte, 0),
-		ProtectedKeyPrefix:            ProtectedKeyPrefix,
+		ProtectedKeyPrefix:            protectedKeyPrefix,
 		arwenStorageProtectionEnabled: true,
 	}
 
