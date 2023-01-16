@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	coreMock "github.com/ElrondNetwork/elrond-go-core/core/mock"
 	vmi "github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
 	"github.com/ElrondNetwork/elrond-vm-common/mock"
@@ -44,7 +43,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
-	addressGenerator := &coreMock.AddressGeneratorStub{}
+	addressGenerator := &worldhook.AddressGeneratorStub{}
 	vm, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
 		VMType:                   testVMType,
 		BlockGasLimit:            blockGasLimit,
