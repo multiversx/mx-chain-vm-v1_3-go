@@ -4,12 +4,14 @@ import (
 	"os"
 	"time"
 
+	"github.com/ElrondNetwork/elrond-go-core/core/addressGenerator"
+	"github.com/ElrondNetwork/elrond-go-core/core/pubkeyConverter"
+	logger "github.com/ElrondNetwork/elrond-go-logger"
+	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	"github.com/ElrondNetwork/elrond-vm-common"
 )
 
 var log = logger.GetOrCreate("arwen/part")
@@ -33,8 +35,18 @@ func NewArwenPart(
 	messenger := NewArwenMessenger(input, output, marshalizer)
 	blockchain := NewBlockchainHookGateway(messenger)
 
+	converter, err := pubkeyConverter.NewBech32PubkeyConverter(arwen.AddressLen, log)
+	if err != nil {
+		return nil, err
+	}
+	adressGenerator, err := addressGenerator.NewAddressGenerator(converter)
+	if err != nil {
+		return nil, err
+	}
+
 	newArwenHost, err := host.NewArwenVM(
 		blockchain,
+		adressGenerator,
 		vmHostParameters,
 	)
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"testing"
 
+	coreMock "github.com/ElrondNetwork/elrond-go-core/core/mock"
 	"github.com/ElrondNetwork/elrond-go-core/data/vm"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 	vmcommon "github.com/ElrondNetwork/elrond-vm-common"
@@ -304,7 +305,8 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	err := world.InitBuiltinFunctions(gasSchedule)
 	require.Nil(tb, err)
 
-	host, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
+	adressGenerator := &coreMock.AddressGeneratorStub{}
+	host, err := arwenHost.NewArwenVM(world, adressGenerator, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,
@@ -330,8 +332,9 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.V
 	if gasSchedule == nil {
 		gasSchedule = config.MakeGasMapForTests()
 	}
+	adressGenerator := &coreMock.AddressGeneratorStub{}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(blockchain, adressGenerator, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,
@@ -361,8 +364,9 @@ func DefaultTestArwenWithGasSchedule(
 	if gasSchedule == nil {
 		gasSchedule = config.MakeGasMapForTests()
 	}
+	adressGenerator := &coreMock.AddressGeneratorStub{}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(blockchain, adressGenerator, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,

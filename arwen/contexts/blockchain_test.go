@@ -5,10 +5,10 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
 	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,8 +28,9 @@ func TestNewBlockchainContext(t *testing.T) {
 
 	host := &contextmock.VMHostStub{}
 	mockWorld := worldmock.NewMockWorld()
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	blockchainContext, err := NewBlockchainContext(host, mockWorld)
+	blockchainContext, err := NewBlockchainContext(host, mockWorld, adressGenerator)
 	require.Nil(t, err)
 	require.NotNil(t, blockchainContext)
 }
@@ -40,8 +41,9 @@ func TestBlockchainContext_AccountExists(t *testing.T) {
 	host := &contextmock.VMHostStub{}
 	mockWorld := worldmock.NewMockWorld()
 	mockWorld.AcctMap.PutAccounts(testAccounts)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	require.False(t, blockchainContext.AccountExists([]byte("account_missing")))
 	require.False(t, blockchainContext.AccountExists([]byte("account_faulty")))
@@ -59,7 +61,8 @@ func TestBlockchainContext_GetBalance(t *testing.T) {
 	mockOutput := &contextmock.OutputContextMock{}
 	host := &contextmock.VMHostMock{}
 	host.OutputContext = mockOutput
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	// Act as if the OutputContext has no OutputAccounts cached
 	// (mockOutput.GetOutputAccount() always returns "is new")
@@ -109,7 +112,8 @@ func TestBlockchainContext_GetBalance_Updates(t *testing.T) {
 	mockOutput := &contextmock.OutputContextMock{}
 	host := &contextmock.VMHostMock{}
 	host.OutputContext = mockOutput
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	// Act as if the OutputContext has no OutputAccounts cached
 	// (mockOutput.GetOutputAccount() always returns "is new")
@@ -144,7 +148,8 @@ func TestBlockchainContext_GetNonceAndIncrease(t *testing.T) {
 
 	mockWorld := worldmock.NewMockWorld()
 	mockWorld.AcctMap.PutAccounts(testAccounts)
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	// GetNonce: Test if error is propagated from BlockchainHook, and that the
 	// cached OutputAccount doesn't lose its Nonce due to the error.
@@ -198,8 +203,9 @@ func TestBlockchainContext_GetCodeHashAndSize(t *testing.T) {
 	host := &contextmock.VMHostMock{}
 	host.CryptoHook = mockCrypto
 	host.OutputContext = outputContext
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	address := []byte("account_with_code")
 	expectedCode := []byte("somecode")
@@ -267,9 +273,10 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 		OutputContext:  mockOutput,
 		RuntimeContext: mockRuntime,
 	}
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
 	// Test error propagation from GetNonce()
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 	creatorAddress := []byte("account_new")
 	creatorAccount := mockWorld.AcctMap.GetAccount(creatorAddress)
 	creatorOutputAccount := mockOutput.NewVMOutputAccountFromMockAccount(creatorAccount)
@@ -293,6 +300,8 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 	expectedCreatorAddres := creatorAddress
 	stubBlockchain := &contextmock.BlockchainHookStub{
 		GetUserAccountCalled: mockWorld.GetUserAccount,
+	}
+	adressGenerator = &worldmock.AddressGeneratorStub{
 		NewAddressCalled: func(creatorAddress []byte, creatorNonce uint64, vmType []byte) ([]byte, error) {
 			require.Equal(t, expectedCreatorAddres, creatorAddress)
 			require.Equal(t, uint64(0), creatorNonce)
@@ -300,7 +309,7 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 			return []byte("new_address"), nil
 		},
 	}
-	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain)
+	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain, adressGenerator)
 
 	address, err = blockchainContext.NewAddress(creatorAddress)
 	require.Nil(t, err)
@@ -316,6 +325,8 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 	expectedCreatorAddres = creatorAddress
 	stubBlockchain = &contextmock.BlockchainHookStub{
 		GetUserAccountCalled: mockWorld.GetUserAccount,
+	}
+	adressGenerator = &worldmock.AddressGeneratorStub{
 		NewAddressCalled: func(creatorAddress []byte, creatorNonce uint64, vmType []byte) ([]byte, error) {
 			require.Equal(t, expectedCreatorAddres, creatorAddress)
 			require.Equal(t, uint64(55), creatorNonce)
@@ -323,7 +334,7 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 			return []byte("new_address"), nil
 		},
 	}
-	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain)
+	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain, adressGenerator)
 
 	address, err = blockchainContext.NewAddress(creatorAddress)
 	require.Nil(t, err)
@@ -339,6 +350,8 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 	expectedCreatorAddres = creatorAddress
 	stubBlockchain = &contextmock.BlockchainHookStub{
 		GetUserAccountCalled: mockWorld.GetUserAccount,
+	}
+	adressGenerator = &worldmock.AddressGeneratorStub{
 		NewAddressCalled: func(creatorAddress []byte, creatorNonce uint64, vmType []byte) ([]byte, error) {
 			require.Equal(t, expectedCreatorAddres, creatorAddress)
 			require.Equal(t, uint64(3), creatorNonce)
@@ -346,7 +359,7 @@ func TestBlockchainContext_NewAddress(t *testing.T) {
 			return nil, errTestError
 		},
 	}
-	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain)
+	blockchainContext, _ = NewBlockchainContext(host, stubBlockchain, adressGenerator)
 
 	address, err = blockchainContext.NewAddress(creatorAddress)
 	require.Equal(t, errTestError, err)
@@ -358,7 +371,8 @@ func TestBlockchainContext_BlockHash(t *testing.T) {
 
 	host := &contextmock.VMHostMock{}
 	mockWorld := worldmock.NewMockWorld()
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	mockWorld.Err = errTestError
 	hash := blockchainContext.BlockHash(42)
@@ -387,8 +401,9 @@ func TestBlockchainContext_IsPayable(t *testing.T) {
 		{Address: []byte("test"), CodeMetadata: []byte{0, vmcommon.MetadataPayable}},
 	}
 	mockWorld.AcctMap.PutAccounts(accounts)
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	bc, _ := NewBlockchainContext(host, mockWorld)
+	bc, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	isPayable, err := bc.IsPayable([]byte("test"))
 	require.Nil(t, err)
@@ -421,8 +436,9 @@ func TestBlockchainContext_Getters(t *testing.T) {
 		},
 		StateRootHash: []byte("root hash"),
 	}
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld)
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
 
 	require.Equal(t, uint32(3), blockchainContext.LastEpoch())
 	require.Equal(t, uint32(4), blockchainContext.CurrentEpoch())

@@ -5,17 +5,19 @@ import (
 	"os"
 	"time"
 
+	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
-	"github.com/ElrondNetwork/elrond-vm-common"
 )
 
 // NodePart is the endpoint that implements the message loop on Node's side
 type NodePart struct {
-	Messenger  *NodeMessenger
-	blockchain vmcommon.BlockchainHook
-	Repliers   []common.MessageReplier
-	config     Config
+	Messenger        *NodeMessenger
+	blockchain       vmcommon.BlockchainHook
+	addressGenerator arwen.AddressGenerator
+	Repliers         []common.MessageReplier
+	config           Config
 }
 
 // NewNodePart creates the Node part
