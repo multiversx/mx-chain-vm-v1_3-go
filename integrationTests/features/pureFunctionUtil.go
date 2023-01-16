@@ -44,8 +44,8 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
-	adressGenerator := &coreMock.AddressGeneratorStub{}
-	vm, err := arwenHost.NewArwenVM(world, adressGenerator, &arwen.VMHostParameters{
+	addressGenerator := &coreMock.AddressGeneratorStub{}
+	vm, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
 		VMType:                   testVMType,
 		BlockGasLimit:            blockGasLimit,
 		GasSchedule:              gasSchedule,

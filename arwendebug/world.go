@@ -35,12 +35,12 @@ func newWorld(dataModel *worldDataModel) (*world, error) {
 	blockchainHook := worldmock.NewMockWorld()
 	blockchainHook.AcctMap = dataModel.Accounts
 
-	adressGenerator := &worldmock.AddressGeneratorStub{
+	addressGenerator := &worldmock.AddressGeneratorStub{
 		NewAddressCalled: blockchainHook.CreateMockWorldNewAddress,
 	}
 	vm, err := host.NewArwenVM(
 		blockchainHook,
-		adressGenerator,
+		addressGenerator,
 		getHostParameters(),
 	)
 	if err != nil {

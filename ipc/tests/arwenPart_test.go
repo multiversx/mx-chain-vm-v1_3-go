@@ -5,6 +5,9 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
+	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/arwenpart"
@@ -13,9 +16,6 @@ import (
 	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/nodepart"
 	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
 	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -29,16 +29,18 @@ type testFiles struct {
 
 func TestArwenPart_SendDeployRequest(t *testing.T) {
 	blockchain := &contextmock.BlockchainHookStub{}
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	response, err := doContractRequest(t, "2", createDeployRequest(bytecodeCounter), blockchain)
+	response, err := doContractRequest(t, "2", createDeployRequest(bytecodeCounter), blockchain, adressGenerator)
 	require.NotNil(t, response)
 	require.Nil(t, err)
 }
 
 func TestArwenPart_SendCallRequestWhenNoContract(t *testing.T) {
 	blockchain := &contextmock.BlockchainHookStub{}
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	response, err := doContractRequest(t, "3", createCallRequest("increment"), blockchain)
+	response, err := doContractRequest(t, "3", createCallRequest("increment"), blockchain, adressGenerator)
 	require.NotNil(t, response)
 	require.Nil(t, err)
 }
@@ -49,8 +51,9 @@ func TestArwenPart_SendCallRequest(t *testing.T) {
 	blockchain.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 		return &worldmock.Account{Code: bytecodeCounter}, nil
 	}
+	adressGenerator := &worldmock.AddressGeneratorStub{}
 
-	response, err := doContractRequest(t, "3", createCallRequest("increment"), blockchain)
+	response, err := doContractRequest(t, "3", createCallRequest("increment"), blockchain, adressGenerator)
 	require.NotNil(t, response)
 	require.Nil(t, err)
 }
@@ -60,6 +63,7 @@ func doContractRequest(
 	tag string,
 	request common.MessageHandler,
 	blockchain vmcommon.BlockchainHook,
+	addressGenerator arwen.AddressGenerator,
 ) (common.MessageHandler, error) {
 	files := createTestFiles(t, tag)
 	var response common.MessageHandler
@@ -100,6 +104,7 @@ func doContractRequest(
 			files.inputOfNode,
 			files.outputOfNode,
 			blockchain,
+			addressGenerator,
 			nodepart.Config{MaxLoopTime: 1000},
 			marshaling.CreateMarshalizer(marshaling.JSON),
 		)

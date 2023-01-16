@@ -77,12 +77,12 @@ func TestExecution_DeployNewAddressErr(t *testing.T) {
 
 	test.BuildInstanceCreatorTest(t).
 		WithInput(input).
-		WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub) {
+		WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub, stubAdressGenerator *worldmock.AddressGeneratorStub) {
 			stubBlockchainHook.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 				require.Equal(t, input.CallerAddr, address)
 				return &contextmock.StubAccount{}, nil
 			}
-			stubBlockchainHook.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
+			stubAdressGenerator.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
 				require.Equal(t, input.CallerAddr, creatorAddress)
 				require.Equal(t, uint64(0), nonce)
 				require.Equal(t, test.DefaultVMType, vmType)
@@ -273,11 +273,11 @@ func TestExecution_ManyDeployments(t *testing.T) {
 				WithContractCode(test.GetTestSCCode("init-simple", "../../")).
 				Build()).
 			WithAddress(newAddress).
-			WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub) {
+			WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub, stubAdressGenerator *worldmock.AddressGeneratorStub) {
 				stubBlockchainHook.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 					return &contextmock.StubAccount{Nonce: ownerNonce}, nil
 				}
-				stubBlockchainHook.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
+				stubAdressGenerator.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
 					ownerNonce++
 					return []byte(string(newAddress) + " " + fmt.Sprint(ownerNonce)), nil
 				}
@@ -1851,7 +1851,8 @@ func TestExecution_ExecuteOnDestContext_Recursive_Mutual_SCs_OutOfGas(t *testing
 
 func TestExecution_ExecuteOnSameContext_MultipleChildren(t *testing.T) {
 	world := worldmock.NewMockWorld()
-	host := test.DefaultTestArwen(t, world)
+	stubAdressGenerator := &worldmock.AddressGeneratorStub{}
+	host := test.DefaultTestArwen(t, world, stubAdressGenerator)
 
 	alphaCode := test.GetTestSCCodeModule("exec-sync-ctx-multiple/alpha", "alpha", "../../")
 	alpha := test.AddTestSmartContractToWorld(world, "alphaSC", alphaCode)
@@ -1891,7 +1892,8 @@ func TestExecution_ExecuteOnSameContext_MultipleChildren(t *testing.T) {
 
 func TestExecution_ExecuteOnDestContext_MultipleChildren(t *testing.T) {
 	world := worldmock.NewMockWorld()
-	host := test.DefaultTestArwen(t, world)
+	stubAdressGenerator := &worldmock.AddressGeneratorStub{}
+	host := test.DefaultTestArwen(t, world, stubAdressGenerator)
 
 	alphaCode := test.GetTestSCCodeModule("exec-sync-ctx-multiple/alpha", "alpha", "../../")
 	alpha := test.AddTestSmartContractToWorld(world, "alphaSC", alphaCode)
@@ -2359,7 +2361,7 @@ func TestExecution_CreateNewContract_IsSmartContract(t *testing.T) {
 
 	test.BuildInstanceCreatorTest(t).
 		WithInput(input).
-		WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub) {
+		WithSetup(func(host arwen.VMHost, stubBlockchainHook *contextmock.BlockchainHookStub, stubAdressGenerator *worldmock.AddressGeneratorStub) {
 			stubBlockchainHook.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 				strAddress := string(address)
 				if strAddress == string(childAddress) {
@@ -2369,7 +2371,7 @@ func TestExecution_CreateNewContract_IsSmartContract(t *testing.T) {
 					Nonce: 24,
 				}, nil
 			}
-			stubBlockchainHook.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
+			stubAdressGenerator.NewAddressCalled = func(creatorAddress []byte, nonce uint64, vmType []byte) ([]byte, error) {
 				ownerNonce++
 				return testcommon.MakeTestSCAddress(fmt.Sprintf("%s_%d", newAddr, ownerNonce)), nil
 			}

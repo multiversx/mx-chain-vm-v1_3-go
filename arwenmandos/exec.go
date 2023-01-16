@@ -44,12 +44,12 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 	if err != nil {
 		return nil, err
 	}
-	adressGenerator := &worldhook.AddressGeneratorStub{
+	addressGenerator := &worldhook.AddressGeneratorStub{
 		NewAddressCalled: world.CreateMockWorldNewAddress,
 	}
 
 	blockGasLimit := uint64(10000000)
-	vm, err := arwenHost.NewArwenVM(world, adressGenerator, &arwen.VMHostParameters{
+	vm, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
 		VMType:                   TestVMType,
 		BlockGasLimit:            blockGasLimit,
 		GasSchedule:              gasScheduleMap,

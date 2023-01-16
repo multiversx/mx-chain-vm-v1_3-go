@@ -90,11 +90,11 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.
 
 	gasMap, err := gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV2())
 	require.Nil(tb, err)
-	adressGenerator := &worldmock.AddressGeneratorStub{
+	addressGenerator := &worldmock.AddressGeneratorStub{
 		NewAddressCalled: mockWorld.CreateMockWorldNewAddress,
 	}
 
-	host, err := arwenHost.NewArwenVM(mockWorld, adressGenerator, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(mockWorld, addressGenerator, &arwen.VMHostParameters{
 		VMType:                   testcommon.DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasMap,

@@ -25,15 +25,17 @@ func NewNodePart(
 	input *os.File,
 	output *os.File,
 	blockchain vmcommon.BlockchainHook,
+	addressGenerator arwen.AddressGenerator,
 	config Config,
 	marshalizer marshaling.Marshalizer,
 ) (*NodePart, error) {
 	messenger := NewNodeMessenger(input, output, marshalizer)
 
 	part := &NodePart{
-		Messenger:  messenger,
-		blockchain: blockchain,
-		config:     config,
+		Messenger:        messenger,
+		blockchain:       blockchain,
+		addressGenerator: addressGenerator,
+		config:           config,
 	}
 
 	part.Repliers = common.CreateReplySlots(part.noopReplier)

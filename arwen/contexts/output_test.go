@@ -402,9 +402,9 @@ func TestOutputContext_Transfer(t *testing.T) {
 		Nonce:   42,
 		Balance: balance,
 	})
-	adressGenerator := &worldmock.AddressGeneratorStub{}
+	addressGenerator := &worldmock.AddressGeneratorStub{}
 
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, addressGenerator)
 	outputContext, _ := NewOutputContext(host)
 
 	host.OutputContext = outputContext
@@ -439,8 +439,8 @@ func TestOutputContext_Transfer_Errors_And_Checks(t *testing.T) {
 
 	host := &contextmock.VMHostMock{}
 	outputContext, _ := NewOutputContext(host)
-	adressGenerator := &worldmock.AddressGeneratorStub{}
-	blockchainContext, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
+	addressGenerator := &worldmock.AddressGeneratorStub{}
+	blockchainContext, _ := NewBlockchainContext(host, mockWorld, addressGenerator)
 
 	host.RuntimeContext = &contextmock.RuntimeContextMock{VMInput: &vmcommon.VMInput{}}
 	host.OutputContext = outputContext
@@ -507,8 +507,8 @@ func TestOutputContext_Transfer_IsAccountPayable(t *testing.T) {
 
 	host := &contextmock.VMHostMock{}
 	oc, _ := NewOutputContext(host)
-	adressGenerator := &worldmock.AddressGeneratorStub{}
-	bc, _ := NewBlockchainContext(host, mockWorld, adressGenerator)
+	addressGenerator := &worldmock.AddressGeneratorStub{}
+	bc, _ := NewBlockchainContext(host, mockWorld, addressGenerator)
 
 	host.OutputContext = oc
 	host.BlockchainContext = bc
