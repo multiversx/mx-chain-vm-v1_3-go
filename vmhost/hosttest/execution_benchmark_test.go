@@ -1,4 +1,4 @@
-package hosttest
+package hostCoretest
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
-	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
@@ -73,7 +73,7 @@ func runERC20Benchmark(tb testing.TB, nTransfers int, nRuns int) {
 	verifyTransfers(tb, mockWorld, totalTokenSupply)
 }
 
-func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.MockWorld) {
+func deploy(tb testing.TB, totalTokenSupply *big.Int) (vmhost.VMHost, *worldmock.MockWorld) {
 	// Prepare the host
 	mockWorld := worldmock.NewMockWorld()
 	ownerAccount := &worldmock.Account{
@@ -91,12 +91,12 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.
 	gasMap, err := gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV2())
 	require.Nil(tb, err)
 
-	host, err := arwenHost.NewVMHost(mockWorld, &arwen.VMHostParameters{
+	host, err := hostCore.NewVMHost(mockWorld, &vmhost.VMHostParameters{
 		VMType:               testcommon.DefaultVMType,
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasMap,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
@@ -140,7 +140,7 @@ func verifyTransfers(tb testing.TB, mockWorld *worldmock.MockWorld, totalTokenSu
 	scStorage := mockWorld.AcctMap.GetAccount(scAddress).Storage
 	ownerTokens := big.NewInt(0).SetBytes(scStorage[ownerKey])
 	receiverTokens := big.NewInt(0).SetBytes(scStorage[receiverKey])
-	require.Equal(tb, arwen.Zero, ownerTokens)
+	require.Equal(tb, vmhost.Zero, ownerTokens)
 	require.Equal(tb, totalTokenSupply, receiverTokens)
 }
 
