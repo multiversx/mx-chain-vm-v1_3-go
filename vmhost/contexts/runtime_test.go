@@ -25,14 +25,14 @@ const WASMPageSize = 65536
 const counterWasmCode = "./../../test/contracts/counter/output/counter.wasm"
 
 func MakeAPIImports() *wasmer.Imports {
-	imports, _ := vmhooks.ElrondEIImports()
+	imports, _ := vmhooks.BaseOpsAPIImports()
 	imports, _ = vmhooks.BigIntImports(imports)
 	imports, _ = vmhooks.SmallIntImports(imports)
 	imports, _ = cryptoapi.CryptoImports(imports)
 	return imports
 }
 
-func InitializeArwenAndWasmer() *contextmock.VMHostMock {
+func InitializeVMAndWasmer() *contextmock.VMHostMock {
 	imports := MakeAPIImports()
 	_ = wasmer.SetImports(imports)
 
@@ -54,7 +54,7 @@ func InitializeArwenAndWasmer() *contextmock.VMHostMock {
 }
 
 func TestNewRuntimeContext(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 
@@ -70,7 +70,7 @@ func TestNewRuntimeContext(t *testing.T) {
 }
 
 func TestRuntimeContext_InitState(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 
@@ -94,7 +94,7 @@ func TestRuntimeContext_InitState(t *testing.T) {
 }
 
 func TestRuntimeContext_NewWasmerInstance(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 
@@ -122,7 +122,7 @@ func TestRuntimeContext_NewWasmerInstance(t *testing.T) {
 }
 
 func TestRuntimeContext_IsFunctionImported(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 	vmType := []byte("type")
 
 	runtimeContext, err := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -208,7 +208,7 @@ func TestRuntimeContext_StateSettersAndGetters(t *testing.T) {
 }
 
 func TestRuntimeContext_PushPopInstance(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -295,7 +295,7 @@ func TestRuntimeContext_PushPopState(t *testing.T) {
 }
 
 func TestRuntimeContext_Instance(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -339,7 +339,7 @@ func TestRuntimeContext_Instance(t *testing.T) {
 }
 
 func TestRuntimeContext_Breakpoints(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	mockOutput := &contextmock.OutputContextMock{
 		OutputAccountMock: NewVMOutputAccount([]byte("address")),
@@ -400,7 +400,7 @@ func TestRuntimeContext_Breakpoints(t *testing.T) {
 }
 
 func TestRuntimeContext_MemLoadStoreOk(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -432,7 +432,7 @@ func TestRuntimeContext_MemLoadStoreOk(t *testing.T) {
 }
 
 func TestRuntimeContext_MemoryIsBlank(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -462,7 +462,7 @@ func TestRuntimeContext_MemoryIsBlank(t *testing.T) {
 }
 
 func TestRuntimeContext_MemLoadCases(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -526,7 +526,7 @@ func TestRuntimeContext_MemLoadCases(t *testing.T) {
 }
 
 func TestRuntimeContext_MemStoreCases(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -591,7 +591,7 @@ func TestRuntimeContext_MemStoreCases(t *testing.T) {
 }
 
 func TestRuntimeContext_MemLoadStoreVsInstanceStack(t *testing.T) {
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -653,7 +653,7 @@ func TestRuntimeContext_MemLoadStoreVsInstanceStack(t *testing.T) {
 func TestRuntimeContext_PopSetActiveStateIfStackIsEmptyShouldNotPanic(t *testing.T) {
 	t.Parallel()
 
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -665,7 +665,7 @@ func TestRuntimeContext_PopSetActiveStateIfStackIsEmptyShouldNotPanic(t *testing
 func TestRuntimeContext_PopDiscardIfStackIsEmptyShouldNotPanic(t *testing.T) {
 	t.Parallel()
 
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())
@@ -677,7 +677,7 @@ func TestRuntimeContext_PopDiscardIfStackIsEmptyShouldNotPanic(t *testing.T) {
 func TestRuntimeContext_PopInstanceIfStackIsEmptyShouldNotPanic(t *testing.T) {
 	t.Parallel()
 
-	host := InitializeArwenAndWasmer()
+	host := InitializeVMAndWasmer()
 
 	vmType := []byte("type")
 	runtimeContext, _ := NewRuntimeContext(host, vmType, false, builtInFunctions.NewBuiltInFunctionContainer())

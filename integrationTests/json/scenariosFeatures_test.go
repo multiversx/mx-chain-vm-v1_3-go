@@ -51,7 +51,7 @@ func TestTimelocks(t *testing.T) {
 }
 
 // func TestPromises(t *testing.T) {
-// 	executor, err := am.NewArwenTestExecutor()
+// 	executor, err := am.NewVMTestExecutor()
 // 	require.Nil(t, err)
 // 	runner := mc.NewScenarioRunner(
 // 		executor,

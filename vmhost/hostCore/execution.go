@@ -131,7 +131,7 @@ func (host *vmHost) doRunSmartContractUpgrade(input *vmcommon.ContractCallInput)
 }
 
 func (host *vmHost) checkGasForGetCode(input *vmcommon.ContractCallInput, metering vmhost.MeteringContext) error {
-	if !host.IsArwenV2Enabled() {
+	if !host.IsVMV2Enabled() {
 		return nil
 	}
 
@@ -803,7 +803,7 @@ func addOutputTransferToVMOutput(
 }
 
 func (host *vmHost) checkFinalGasAfterExit() error {
-	if !host.IsArwenV2Enabled() {
+	if !host.IsVMV2Enabled() {
 		return nil
 	}
 

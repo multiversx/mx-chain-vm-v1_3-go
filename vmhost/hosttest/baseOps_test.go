@@ -11,11 +11,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestElrondEI_CallValue(t *testing.T) {
+func TestBaseOpsAPI_CallValue(t *testing.T) {
 	code := testcommon.GetTestSCCode("baseOps", "../../")
 
 	// 1-byte call value
-	host, _ := testcommon.DefaultTestArwenForCall(t, code, nil)
+	host, _ := testcommon.DefaultTestVMForCall(t, code, nil)
 	input := testcommon.DefaultTestContractCallInput()
 	input.GasProvided = 100000
 	input.Function = "test_getCallValue_1byte"
@@ -39,7 +39,7 @@ func TestElrondEI_CallValue(t *testing.T) {
 		data[2])
 
 	// 4-byte call value
-	host, _ = testcommon.DefaultTestArwenForCall(t, code, nil)
+	host, _ = testcommon.DefaultTestVMForCall(t, code, nil)
 	input = testcommon.DefaultTestContractCallInput()
 	input.GasProvided = 100000
 	input.Function = "test_getCallValue_4bytes"
@@ -62,7 +62,7 @@ func TestElrondEI_CallValue(t *testing.T) {
 		data[2])
 
 	// BigInt call value
-	host, _ = testcommon.DefaultTestArwenForCall(t, code, nil)
+	host, _ = testcommon.DefaultTestVMForCall(t, code, nil)
 	input = testcommon.DefaultTestContractCallInput()
 	input.GasProvided = 100000
 	input.Function = "test_getCallValue_bigInt_to_Bytes"
@@ -88,9 +88,9 @@ func TestElrondEI_CallValue(t *testing.T) {
 	assert.Equal(t, big.NewInt(12345), val12345)
 }
 
-func TestElrondEI_int64getArgument(t *testing.T) {
+func TestBaseOpsAPI_int64getArgument(t *testing.T) {
 	code := testcommon.GetTestSCCode("baseOps", "../../")
-	host, _ := testcommon.DefaultTestArwenForCall(t, code, nil)
+	host, _ := testcommon.DefaultTestVMForCall(t, code, nil)
 	input := testcommon.DefaultTestContractCallInput()
 	input.GasProvided = 100000
 	input.Function = "test_int64getArgument"

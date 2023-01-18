@@ -14,7 +14,7 @@ import (
 
 var _ vmhost.OutputContext = (*outputContext)(nil)
 
-var logOutput = logger.GetOrCreate("arwen/output")
+var logOutput = logger.GetOrCreate("vm/output")
 
 type outputContext struct {
 	host        vmhost.VMHost
@@ -261,7 +261,7 @@ func (context *outputContext) TransferValueOnly(destination []byte, sender []byt
 		return err
 	}
 
-	isAsyncCall := context.host.IsArwenV3Enabled() && context.host.Runtime().GetVMInput().CallType == vm.AsynchronousCall
+	isAsyncCall := context.host.IsVMV3Enabled() && context.host.Runtime().GetVMInput().CallType == vm.AsynchronousCall
 	checkPayable = checkPayable || !context.host.IsESDTFunctionsEnabled()
 	hasValue := value.Cmp(vmhost.Zero) > 0
 	if checkPayable && !payable && hasValue && !isAsyncCall {
