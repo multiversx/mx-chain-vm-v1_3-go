@@ -53,7 +53,7 @@ func (mockSC *MockTestSmartContract) WithMethods(initMethods ...func(*mock.Insta
 	return *mockSC
 }
 
-func (mockSC *MockTestSmartContract) initialize(t testing.TB, host arwen.VMHost, imb *mock.InstanceBuilderMock) {
+func (mockSC *MockTestSmartContract) initialize(t testing.TB, host vmhost.VMHost, imb *mock.InstanceBuilderMock) {
 	instance := imb.CreateAndStoreInstanceMock(t, host, mockSC.address, mockSC.shardID, mockSC.balance)
 	for _, initMethod := range mockSC.initMethods {
 		initMethod(instance, mockSC.config)

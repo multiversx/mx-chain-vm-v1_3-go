@@ -115,7 +115,7 @@ func CallBackParentMock(instanceMock *mock.InstanceMock, config interface{}) {
 	})
 }
 
-func handleParentBehaviorArgument(host arwen.VMHost, behavior *big.Int) error {
+func handleParentBehaviorArgument(host vmhost.VMHost, behavior *big.Int) error {
 	if behavior.Cmp(big.NewInt(3)) == 0 {
 		host.Runtime().SignalUserError("callBack error")
 		return errors.New("behavior / parent error")
@@ -153,7 +153,7 @@ func mustTransferToVault(arguments [][]byte) bool {
 	return true
 }
 
-func handleTransferToVault(host arwen.VMHost, arguments [][]byte) error {
+func handleTransferToVault(host vmhost.VMHost, arguments [][]byte) error {
 	err := error(nil)
 	if mustTransferToVault(arguments) {
 		valueToTransfer := big.NewInt(4)
@@ -163,7 +163,7 @@ func handleTransferToVault(host arwen.VMHost, arguments [][]byte) error {
 	return err
 }
 
-func finishResult(host arwen.VMHost, result int) {
+func finishResult(host vmhost.VMHost, result int) {
 	outputContext := host.Output()
 	if result == 0 {
 		outputContext.Finish([]byte("succ"))

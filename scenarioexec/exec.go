@@ -7,7 +7,7 @@ import (
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
-	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	mc "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/controller"
@@ -46,7 +46,7 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 	}
 
 	blockGasLimit := uint64(10000000)
-	vm, err := arwenHost.NewVMHost(world, &arwen.VMHostParameters{
+	vm, err := hostCore.NewVMHost(world, &vmhost.VMHostParameters{
 		VMType:               TestVMType,
 		BlockGasLimit:        blockGasLimit,
 		GasSchedule:          gasScheduleMap,

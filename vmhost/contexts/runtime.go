@@ -17,14 +17,14 @@ import (
 
 var logRuntime = logger.GetOrCreate("arwen/runtime")
 
-var _ arwen.RuntimeContext = (*runtimeContext)(nil)
+var _ vmhost.RuntimeContext = (*runtimeContext)(nil)
 
 // Defined as a constant here, not present in gasSchedule V1, V2, V3
 const MaxMemoryGrow = uint64(10)
 const MaxMemoryGrowDelta = uint64(10)
 
 type runtimeContext struct {
-	host         arwen.VMHost
+	host         vmhost.VMHost
 	instance     wasmer.InstanceHandler
 	vmInput      *vmcommon.VMInput
 	scAddress    []byte
@@ -40,8 +40,8 @@ type runtimeContext struct {
 
 	maxWasmerInstances uint64
 
-	asyncCallInfo    *arwen.AsyncCallInfo
-	asyncContextInfo *arwen.AsyncContextInfo
+	asyncCallInfo    *vmhost.AsyncCallInfo
+	asyncContextInfo *vmhost.AsyncContextInfo
 
 	validator *wasmValidator
 
@@ -49,14 +49,14 @@ type runtimeContext struct {
 	warmInstanceAddress []byte
 	warmInstance        wasmer.InstanceHandler
 
-	instanceBuilder arwen.InstanceBuilder
+	instanceBuilder vmhost.InstanceBuilder
 
-	errors arwen.WrappableError
+	errors vmhost.WrappableError
 }
 
 // NewRuntimeContext creates a new runtimeContext
 func NewRuntimeContext(
-	host arwen.VMHost,
+	host vmhost.VMHost,
 	vmType []byte,
 	useWarmInstance bool,
 	builtInFuncContainer vmcommon.BuiltInFunctionContainer,
@@ -89,8 +89,8 @@ func (context *runtimeContext) InitState() {
 	context.verifyCode = false
 	context.readOnly = false
 	context.asyncCallInfo = nil
-	context.asyncContextInfo = &arwen.AsyncContextInfo{
-		AsyncContextMap: make(map[string]*arwen.AsyncContext),
+	context.asyncContextInfo = &vmhost.AsyncContextInfo{
+		AsyncContextMap: make(map[string]*vmhost.AsyncContext),
 	}
 	context.errors = nil
 
@@ -101,7 +101,7 @@ func (context *runtimeContext) InitState() {
 // of mocked Wasmer instances
 // TODO remove after implementing proper mocking of
 // Wasmer instances; this is used for tests only
-func (context *runtimeContext) ReplaceInstanceBuilder(builder arwen.InstanceBuilder) {
+func (context *runtimeContext) ReplaceInstanceBuilder(builder vmhost.InstanceBuilder) {
 	context.instanceBuilder = builder
 }
 
@@ -115,7 +115,7 @@ func (context *runtimeContext) setWarmInstanceWhenNeeded(gasLimit uint64) bool {
 		context.SetPointsUsed(0)
 		context.instance.SetGasLimit(gasLimit)
 
-		context.SetRuntimeBreakpointValue(arwen.BreakpointNone)
+		context.SetRuntimeBreakpointValue(vmhost.BreakpointNone)
 		return true
 	}
 
@@ -126,8 +126,8 @@ func (context *runtimeContext) setWarmInstanceWhenNeeded(gasLimit uint64) bool {
 func (context *runtimeContext) StartWasmerInstance(contract []byte, gasLimit uint64, newCode bool) error {
 	if context.RunningInstancesCount() >= context.maxWasmerInstances {
 		context.instance = nil
-		logRuntime.Error("create instance", "error", arwen.ErrMaxInstancesReached)
-		return arwen.ErrMaxInstancesReached
+		logRuntime.Error("create instance", "error", vmhost.ErrMaxInstancesReached)
+		return vmhost.ErrMaxInstancesReached
 	}
 
 	warmInstanceUsed := context.setWarmInstanceWhenNeeded(gasLimit)
@@ -308,9 +308,9 @@ func (context *runtimeContext) InitStateFromContractCallInput(input *vmcommon.Co
 	context.scAddress = input.RecipientAddr
 	context.callFunction = input.Function
 	// Reset async map for initial state
-	context.asyncContextInfo = &arwen.AsyncContextInfo{
+	context.asyncContextInfo = &vmhost.AsyncContextInfo{
 		CallerAddr:      input.CallerAddr,
-		AsyncContextMap: make(map[string]*arwen.AsyncContext),
+		AsyncContextMap: make(map[string]*vmhost.AsyncContext),
 	}
 
 	logRuntime.Trace("init state from call input",
@@ -527,7 +527,7 @@ func (context *runtimeContext) ExtractCodeUpgradeFromArgs() ([]byte, []byte, err
 
 	arguments := context.vmInput.Arguments
 	if len(arguments) < numMinUpgradeArguments {
-		return nil, nil, arwen.ErrInvalidUpgradeArguments
+		return nil, nil, vmhost.ErrInvalidUpgradeArguments
 	}
 
 	code := arguments[0]
@@ -550,7 +550,7 @@ func (context *runtimeContext) FailExecution(err error) {
 	}
 
 	context.host.Output().SetReturnMessage(message)
-	context.SetRuntimeBreakpointValue(arwen.BreakpointExecutionFailed)
+	context.SetRuntimeBreakpointValue(vmhost.BreakpointExecutionFailed)
 
 	traceMessage := message
 	if err != nil {
@@ -563,20 +563,20 @@ func (context *runtimeContext) FailExecution(err error) {
 func (context *runtimeContext) SignalUserError(message string) {
 	context.host.Output().SetReturnCode(vmcommon.UserError)
 	context.host.Output().SetReturnMessage(message)
-	context.SetRuntimeBreakpointValue(arwen.BreakpointSignalError)
+	context.SetRuntimeBreakpointValue(vmhost.BreakpointSignalError)
 	context.AddError(errors.New(message))
 	logRuntime.Trace("user error signalled", "message", message)
 }
 
 // SetRuntimeBreakpointValue sets the given value as a breakpoint value.
-func (context *runtimeContext) SetRuntimeBreakpointValue(value arwen.BreakpointValue) {
+func (context *runtimeContext) SetRuntimeBreakpointValue(value vmhost.BreakpointValue) {
 	context.instance.SetBreakpointValue(uint64(value))
 	logRuntime.Trace("runtime breakpoint set", "breakpoint", value)
 }
 
 // GetRuntimeBreakpointValue returns the breakpoint value for the current wasmer instance.
-func (context *runtimeContext) GetRuntimeBreakpointValue() arwen.BreakpointValue {
-	return arwen.BreakpointValue(context.instance.GetBreakpointValue())
+func (context *runtimeContext) GetRuntimeBreakpointValue() vmhost.BreakpointValue {
+	return vmhost.BreakpointValue(context.instance.GetBreakpointValue())
 }
 
 // VerifyContractCode checks the current wasmer instance for enough memory and for correct functions.
@@ -616,40 +616,40 @@ func (context *runtimeContext) checkBackwardCompatibility() error {
 	}
 
 	if context.instance.IsFunctionImported("transferESDTExecute") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("transferESDTNFTExecute") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("transferValueExecute") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTBalance") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTTokenData") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTTokenType") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTTokenNonce") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getCurrentESDTNFTNonce") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTNFTNameLength") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTNFTAttributeLength") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("getESDTNFTURILength") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 	if context.instance.IsFunctionImported("bigIntGetESDTExternalBalance") {
-		return arwen.ErrContractInvalid
+		return vmhost.ErrContractInvalid
 	}
 
 	return nil
@@ -742,19 +742,19 @@ func (context *runtimeContext) GetFunctionToCall() (wasmer.ExportedFunctionCallb
 		return function, nil
 	}
 
-	if context.callFunction == arwen.CallbackFunctionName {
+	if context.callFunction == vmhost.CallbackFunctionName {
 		// TODO rewrite this condition, until the AsyncContext is merged
-		logRuntime.Error("get function to call", "error", arwen.ErrNilCallbackFunction)
-		return nil, arwen.ErrNilCallbackFunction
+		logRuntime.Error("get function to call", "error", vmhost.ErrNilCallbackFunction)
+		return nil, vmhost.ErrNilCallbackFunction
 	}
 
-	return nil, arwen.ErrFuncNotFound
+	return nil, vmhost.ErrFuncNotFound
 }
 
 // GetInitFunction returns the init function from the current wasmer instance exports.
 func (context *runtimeContext) GetInitFunction() wasmer.ExportedFunctionCallback {
 	exports := context.instance.GetExports()
-	if init, ok := exports[arwen.InitFunctionName]; ok {
+	if init, ok := exports[vmhost.InitFunctionName]; ok {
 		return init
 	}
 
@@ -779,14 +779,14 @@ func (context *runtimeContext) ExecuteAsyncCall(address []byte, data []byte, val
 		}
 	}
 
-	context.SetAsyncCallInfo(&arwen.AsyncCallInfo{
+	context.SetAsyncCallInfo(&vmhost.AsyncCallInfo{
 		Destination: address,
 		Data:        data,
 		GasLimit:    metering.GasLeft(),
 		GasLocked:   gasToLock,
 		ValueBytes:  value,
 	})
-	context.SetRuntimeBreakpointValue(arwen.BreakpointAsyncCall)
+	context.SetRuntimeBreakpointValue(vmhost.BreakpointAsyncCall)
 
 	logRuntime.Trace("prepare async call",
 		"caller", context.GetSCAddress(),
@@ -797,17 +797,17 @@ func (context *runtimeContext) ExecuteAsyncCall(address []byte, data []byte, val
 }
 
 // SetAsyncCallInfo sets the given data as the async call info for the current context.
-func (context *runtimeContext) SetAsyncCallInfo(asyncCallInfo *arwen.AsyncCallInfo) {
+func (context *runtimeContext) SetAsyncCallInfo(asyncCallInfo *vmhost.AsyncCallInfo) {
 	context.asyncCallInfo = asyncCallInfo
 }
 
 // AddAsyncContextCall adds the given async call to the asyncContextMap at the given identifier.
-func (context *runtimeContext) AddAsyncContextCall(contextIdentifier []byte, asyncCall *arwen.AsyncGeneratedCall) error {
+func (context *runtimeContext) AddAsyncContextCall(contextIdentifier []byte, asyncCall *vmhost.AsyncGeneratedCall) error {
 	_, ok := context.asyncContextInfo.AsyncContextMap[string(contextIdentifier)]
 	currentContextMap := context.asyncContextInfo.AsyncContextMap
 	if !ok {
-		currentContextMap[string(contextIdentifier)] = &arwen.AsyncContext{
-			AsyncCalls: make([]*arwen.AsyncGeneratedCall, 0),
+		currentContextMap[string(contextIdentifier)] = &vmhost.AsyncContext{
+			AsyncCalls: make([]*vmhost.AsyncGeneratedCall, 0),
 		}
 	}
 
@@ -818,28 +818,28 @@ func (context *runtimeContext) AddAsyncContextCall(contextIdentifier []byte, asy
 }
 
 // GetAsyncContextInfo returns the async context info for the current context.
-func (context *runtimeContext) GetAsyncContextInfo() *arwen.AsyncContextInfo {
+func (context *runtimeContext) GetAsyncContextInfo() *vmhost.AsyncContextInfo {
 	return context.asyncContextInfo
 }
 
 // GetAsyncContext returns the async context mapped to the given context identifier.
-func (context *runtimeContext) GetAsyncContext(contextIdentifier []byte) (*arwen.AsyncContext, error) {
+func (context *runtimeContext) GetAsyncContext(contextIdentifier []byte) (*vmhost.AsyncContext, error) {
 	asyncContext, ok := context.asyncContextInfo.AsyncContextMap[string(contextIdentifier)]
 	if !ok {
-		return nil, arwen.ErrAsyncContextDoesNotExist
+		return nil, vmhost.ErrAsyncContextDoesNotExist
 	}
 
 	return asyncContext, nil
 }
 
 // GetAsyncCallInfo returns the async call info for the current context.
-func (context *runtimeContext) GetAsyncCallInfo() *arwen.AsyncCallInfo {
+func (context *runtimeContext) GetAsyncCallInfo() *vmhost.AsyncCallInfo {
 	return context.asyncCallInfo
 }
 
 // HasCallbackMethod returns true if the current wasmer instance exports has a callback method.
 func (context *runtimeContext) HasCallbackMethod() bool {
-	_, ok := context.instance.GetExports()[arwen.CallbackFunctionName]
+	_, ok := context.instance.GetExports()[vmhost.CallbackFunctionName]
 	return ok
 }
 
@@ -865,10 +865,10 @@ func (context *runtimeContext) MemLoad(offset int32, length int32) ([]byte, erro
 	isLengthNegative := length < 0
 
 	if isOffsetTooSmall || isOffsetTooLarge {
-		return nil, fmt.Errorf("mem load: %w", arwen.ErrBadBounds)
+		return nil, fmt.Errorf("mem load: %w", vmhost.ErrBadBounds)
 	}
 	if isLengthNegative {
-		return nil, fmt.Errorf("mem load: %w", arwen.ErrNegativeLength)
+		return nil, fmt.Errorf("mem load: %w", vmhost.ErrNegativeLength)
 	}
 
 	result := make([]byte, length)
@@ -918,7 +918,7 @@ func (context *runtimeContext) MemStore(offset int32, data []byte) error {
 	isNewPageNecessary := uint32(requestedEnd) > memoryLength
 
 	if isOffsetTooSmall {
-		return arwen.ErrBadLowerBounds
+		return vmhost.ErrBadLowerBounds
 	}
 	if isNewPageNecessary {
 		err := memory.Grow(1)
@@ -932,7 +932,7 @@ func (context *runtimeContext) MemStore(offset int32, data []byte) error {
 
 	isRequestedEndTooLarge := uint32(requestedEnd) > memoryLength
 	if isRequestedEndTooLarge {
-		return arwen.ErrBadUpperBounds
+		return vmhost.ErrBadUpperBounds
 	}
 
 	copy(memoryView[offset:requestedEnd], data)
@@ -945,7 +945,7 @@ func (context *runtimeContext) AddError(err error, otherInfo ...string) {
 		return
 	}
 	if context.errors == nil {
-		context.errors = arwen.WrapError(err, otherInfo...)
+		context.errors = vmhost.WrapError(err, otherInfo...)
 		return
 	}
 	context.errors = context.errors.WrapWithError(err, otherInfo...)

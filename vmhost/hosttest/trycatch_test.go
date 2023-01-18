@@ -1,10 +1,10 @@
-package hosttest
+package hostCoretest
 
 import (
 	"fmt"
 	"testing"
 
-	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/host"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,7 +20,7 @@ func Test_TryCatch_WorksWhenNoError(t *testing.T) {
 		catchCalled = true
 	}
 
-	arwenHost.TryCatch(try, catch, "message")
+	hostCore.TryCatch(try, catch, "message")
 
 	assert.True(t, tryCalled)
 	assert.False(t, catchCalled)
@@ -39,7 +39,7 @@ func Test_TryCatch_CatchesRuntimeError(t *testing.T) {
 		caughtError = err
 	}
 
-	arwenHost.TryCatch(try, catch, "message")
+	hostCore.TryCatch(try, catch, "message")
 
 	assert.NotNil(t, caughtError)
 }
@@ -55,7 +55,7 @@ func Test_TryCatch_CatchesCustomError(t *testing.T) {
 		caughtError = err
 	}
 
-	arwenHost.TryCatch(try, catch, "!thisMessage!")
+	hostCore.TryCatch(try, catch, "!thisMessage!")
 
 	assert.NotNil(t, caughtError)
 	assert.Contains(t, caughtError.Error(), "!thisMessage!")
@@ -74,7 +74,7 @@ func Test_TryCatch_CatchesCustomErrorTyped(t *testing.T) {
 		caughtError = err
 	}
 
-	arwenHost.TryCatch(try, catch, "!thisMessage!")
+	hostCore.TryCatch(try, catch, "!thisMessage!")
 
 	assert.NotNil(t, caughtError)
 	assert.Equal(t, customError, caughtError)
