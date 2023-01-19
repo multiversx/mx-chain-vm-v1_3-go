@@ -10,11 +10,11 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
+	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
-	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
-	testcommon "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 
@@ -96,7 +96,7 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (vmhost.VMHost, *worldmock
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasMap,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,

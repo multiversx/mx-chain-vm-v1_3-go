@@ -1,4 +1,4 @@
-package mandosjsonparse
+package scenjsonparse
 
 import (
 	ei "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/interpreter"

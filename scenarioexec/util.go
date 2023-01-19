@@ -9,9 +9,9 @@ import (
 	"github.com/multiversx/mx-chain-core-go/data/esdt"
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
-	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 func convertAccount(testAcct *mj.Account, world *worldmock.MockWorld) (*worldmock.Account, error) {
@@ -42,14 +42,14 @@ func convertAccount(testAcct *mj.Account, world *worldmock.MockWorld) (*worldmoc
 			Payable:     true,
 			Upgradeable: true,
 			Readable:    true,
-		}).ToBytes(), // TODO: add explicit fields in mandos json
+		}).ToBytes(), // TODO: add explicit fields in scenario JSON
 		MockWorld: world,
 	}
 
-	for _, mandosESDTData := range testAcct.ESDTData {
-		tokenName := mandosESDTData.TokenIdentifier.Value
-		isFrozen := mandosESDTData.Frozen.Value > 0
-		for _, instance := range mandosESDTData.Instances {
+	for _, scenESDTData := range testAcct.ESDTData {
+		tokenName := scenESDTData.TokenIdentifier.Value
+		isFrozen := scenESDTData.Frozen.Value > 0
+		for _, instance := range scenESDTData.Instances {
 			tokenNonce := instance.Nonce.Value
 			tokenKey := worldmock.MakeTokenKey(tokenName, tokenNonce)
 			tokenBalance := instance.Balance.Value
@@ -71,12 +71,12 @@ func convertAccount(testAcct *mj.Account, world *worldmock.MockWorld) (*worldmoc
 			if err != nil {
 				return nil, err
 			}
-			err = account.SetLastNonce(tokenName, mandosESDTData.LastNonce.Value)
+			err = account.SetLastNonce(tokenName, scenESDTData.LastNonce.Value)
 			if err != nil {
 				return nil, err
 			}
 		}
-		err := account.SetTokenRolesAsStrings(tokenName, mandosESDTData.Roles)
+		err := account.SetTokenRolesAsStrings(tokenName, scenESDTData.Roles)
 		if err != nil {
 			return nil, err
 		}
@@ -85,12 +85,12 @@ func convertAccount(testAcct *mj.Account, world *worldmock.MockWorld) (*worldmoc
 	return account, nil
 }
 
-func validateSetStateAccount(mandosAccount *mj.Account, converted *worldmock.Account) error {
+func validateSetStateAccount(scenAccount *mj.Account, converted *worldmock.Account) error {
 	err := converted.Validate()
 	if err != nil {
 		return fmt.Errorf(
 			`"setState" step validation failed for account "%s": %w`,
-			mandosAccount.Address.Original,
+			scenAccount.Address.Original,
 			err)
 	}
 	return nil
@@ -148,7 +148,7 @@ func convertBlockInfo(testBlockInfo *mj.BlockInfo) *worldmock.BlockInfo {
 	return result
 }
 
-// this is a small hack, so we can reuse mandos's JSON printing in error messages
+// this is a small hack, so we can reuse JSON printing in error messages
 func (ae *VMTestExecutor) convertLogToTestFormat(outputLog *vmcommon.LogEntry) *mj.LogEntry {
 	testLog := mj.LogEntry{
 		Address: mj.JSONCheckBytesReconstructed(

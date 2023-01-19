@@ -5,9 +5,9 @@ import (
 	"math/big"
 
 	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/vmhooks"
 	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/vmhooks"
 )
 
 // ExecESDTTransferAndCallChild is an exposed mock contract method

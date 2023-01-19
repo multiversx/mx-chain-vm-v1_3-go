@@ -97,8 +97,8 @@ def generate_messages(args):
 
     print("""
         import (        
-        \"github.com/ElrondNetwork/elrond-go/core/vmcommon\"
-        \"github.com/ElrondNetwork/elrond-go/data/esdt\"
+        \"github.com/multiversx/multiversx/core/vmcommon\"
+        \"github.com/multiversx/multiversx/data/esdt\"
         )
 	""")
 
@@ -189,9 +189,9 @@ def generate_repliers(args):
     print("package nodepart")
     print("""
     	import (
-	    \"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/ipc/common\"
-        \"github.com/ElrondNetwork/arwen-wasm-vm/v1_3/arwen\"
-	    \"github.com/ElrondNetwork/elrond-go/data/esdt\"
+	    \"github.com/multiversx/mx-chain-vm-go/v1_3/ipc/common\"
+        \"github.com/multiversx/mx-chain-vm-go/v1_3/vmhost\"
+	    \"github.com/multiversx/multiversx/data/esdt\"
 	)
 	""")
 
@@ -200,7 +200,7 @@ def generate_repliers(args):
         typedRequest = f"typedRequest := request.(*common.MessageBlockchain{signature.name}Request)\n" if signature.input else ""
 
         errCode = f"""
-            if err != nil || arwen.IfNil(result) {{
+            if err != nil || vmhost.IfNil(result) {{
                 return common.NewMessageBlockchain{signature.name}Response({output_args_for_err})
             }}
         """
@@ -265,10 +265,10 @@ def generate_gateway(args):
     print("""
 
 import (
-    "github.com/ElrondNetwork/elrond-go/data/esdt"
+    "github.com/multiversx/multiversx/data/esdt"
 
-    "github.com/ElrondNetwork/arwen-wasm-vm/v1_3/ipc/common"
-    "github.com/ElrondNetwork/elrond-go/core/vmcommon"
+    "github.com/multiversx/mx-chain-vm-go/v1_3/ipc/common"
+    "github.com/multiversx/multiversx/core/vmcommon"
 )
 
 var _ vmcommon.BlockchainHook = (*BlockchainHookGateway)(nil)

@@ -55,8 +55,8 @@ import (
 	"math/big"
 	"unsafe"
 
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 	twos "github.com/multiversx/mx-components-big-int/twos-complement"
 )

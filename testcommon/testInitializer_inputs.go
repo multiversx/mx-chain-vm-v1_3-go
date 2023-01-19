@@ -17,11 +17,11 @@ import (
 	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/require"
 )
 
@@ -309,7 +309,7 @@ func DefaultTestVMWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.MockWo
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: world.BuiltinFuncs.Container,
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
@@ -336,7 +336,7 @@ func DefaultTestVM(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.VMH
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
@@ -367,7 +367,7 @@ func DefaultTestVMWithGasSchedule(
 		BlockGasLimit:        uint64(1000),
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsStorageAPICostOptimizationFlagEnabledField:         true,
 			IsMultiESDTTransferFixOnCallBackFlagEnabledField:     true,
