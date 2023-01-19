@@ -25,7 +25,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-var log = logger.GetOrCreate("arwen/host")
+var log = logger.GetOrCreate("vm/host")
 
 // DefaultVMType is an exposed value to use in tests
 var DefaultVMType = []byte{0xF, 0xF}
@@ -114,8 +114,8 @@ func BuildSCModule(scName string, prefixToTestSCs string) {
 	log.Info("contract built", "output", fmt.Sprintf("\n%s", out))
 }
 
-// DefaultTestArwenForDeployment creates an Arwen vmHost configured for testing deployments
-func DefaultTestArwenForDeployment(t *testing.T, _ uint64, newAddress []byte) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForDeployment creates an VM vmHost configured for testing deployments
+func DefaultTestVMForDeployment(t *testing.T, _ uint64, newAddress []byte) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 		return &contextmock.StubAccount{
@@ -126,12 +126,12 @@ func DefaultTestArwenForDeployment(t *testing.T, _ uint64, newAddress []byte) (v
 		return newAddress, nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCall creates a BlockchainHookStub
-func DefaultTestArwenForCall(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForCall creates a BlockchainHookStub
+func DefaultTestVMForCall(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(scAddress []byte) (vmcommon.UserAccountHandler, error) {
 		if bytes.Equal(scAddress, ParentAddress) {
@@ -145,12 +145,12 @@ func DefaultTestArwenForCall(tb testing.TB, code []byte, balance *big.Int) (vmho
 		return code
 	}
 
-	host := DefaultTestArwen(tb, stubBlockchainHook)
+	host := DefaultTestVM(tb, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCall creates a BlockchainHookStub
-func DefaultTestArwenForCallSigSegv(tb testing.TB, code []byte, balance *big.Int, passthrough bool) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForCall creates a BlockchainHookStub
+func DefaultTestVMForCallSigSegv(tb testing.TB, code []byte, balance *big.Int, passthrough bool) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(scAddress []byte) (vmcommon.UserAccountHandler, error) {
 		if bytes.Equal(scAddress, ParentAddress) {
@@ -165,14 +165,14 @@ func DefaultTestArwenForCallSigSegv(tb testing.TB, code []byte, balance *big.Int
 	}
 
 	customGasSchedule := config.GasScheduleMap(nil)
-	host := DefaultTestArwenWithGasSchedule(tb, stubBlockchainHook, customGasSchedule, passthrough)
+	host := DefaultTestVMWithGasSchedule(tb, stubBlockchainHook, customGasSchedule, passthrough)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCallWithInstanceRecorderMock creates an InstanceBuilderRecorderMock
-func DefaultTestArwenForCallWithInstanceRecorderMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.InstanceBuilderRecorderMock) {
+// DefaultTestVMForCallWithInstanceRecorderMock creates an InstanceBuilderRecorderMock
+func DefaultTestVMForCallWithInstanceRecorderMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.InstanceBuilderRecorderMock) {
 	// this uses a Blockchain Hook Stub that does not cache the compiled code
-	host, _ := DefaultTestArwenForCall(tb, code, balance)
+	host, _ := DefaultTestVMForCall(tb, code, balance)
 
 	instanceBuilderRecorderMock := contextmock.NewInstanceBuilderRecorderMock()
 	host.Runtime().ReplaceInstanceBuilder(instanceBuilderRecorderMock)
@@ -180,10 +180,10 @@ func DefaultTestArwenForCallWithInstanceRecorderMock(tb testing.TB, code []byte,
 	return host, instanceBuilderRecorderMock
 }
 
-// DefaultTestArwenForCallWithInstanceMocks creates an InstanceBuilderMock
-func DefaultTestArwenForCallWithInstanceMocks(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld, *contextmock.InstanceBuilderMock) {
+// DefaultTestVMForCallWithInstanceMocks creates an InstanceBuilderMock
+func DefaultTestVMForCallWithInstanceMocks(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld, *contextmock.InstanceBuilderMock) {
 	world := worldmock.NewMockWorld()
-	host := DefaultTestArwen(tb, world)
+	host := DefaultTestVM(tb, world)
 
 	instanceBuilderMock := contextmock.NewInstanceBuilderMock(world)
 	host.Runtime().ReplaceInstanceBuilder(instanceBuilderMock)
@@ -191,10 +191,10 @@ func DefaultTestArwenForCallWithInstanceMocks(tb testing.TB) (vmhost.VMHost, *wo
 	return host, world, instanceBuilderMock
 }
 
-// DefaultTestArwenForCallWithWorldMock creates a MockWorld
-func DefaultTestArwenForCallWithWorldMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *worldmock.MockWorld) {
+// DefaultTestVMForCallWithWorldMock creates a MockWorld
+func DefaultTestVMForCallWithWorldMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *worldmock.MockWorld) {
 	world := worldmock.NewMockWorld()
-	host := DefaultTestArwen(tb, world)
+	host := DefaultTestVM(tb, world)
 
 	err := world.InitBuiltinFunctions(host.GetGasScheduleMap())
 	require.Nil(tb, err)
@@ -207,8 +207,8 @@ func DefaultTestArwenForCallWithWorldMock(tb testing.TB, code []byte, balance *b
 	return host, world
 }
 
-// DefaultTestArwenForTwoSCs creates an Arwen vmHost configured for testing calls between 2 SmartContracts
-func DefaultTestArwenForTwoSCs(
+// DefaultTestVMForTwoSCs creates an VM vmHost configured for testing calls between 2 SmartContracts
+func DefaultTestVMForTwoSCs(
 	t *testing.T,
 	parentCode []byte,
 	childCode []byte,
@@ -251,11 +251,11 @@ func DefaultTestArwenForTwoSCs(
 		return nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-func defaultTestArwenForContracts(
+func defaultTestVMForContracts(
 	t *testing.T,
 	contracts []*InstanceTestSmartContract,
 ) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
@@ -290,12 +290,12 @@ func defaultTestArwenForContracts(
 		return nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenWithWorldMock creates a host configured with a mock world
-func DefaultTestArwenWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld) {
+// DefaultTestVMWithWorldMock creates a host configured with a mock world
+func DefaultTestVMWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld) {
 	world := worldmock.NewMockWorld()
 	gasSchedule := customGasSchedule
 	if gasSchedule == nil {
@@ -324,8 +324,8 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.Moc
 	return host, world
 }
 
-// DefaultTestArwen creates a host configured with a configured blockchain hook
-func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.VMHost {
+// DefaultTestVM creates a host configured with a configured blockchain hook
+func DefaultTestVM(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.VMHost {
 	gasSchedule := customGasSchedule
 	if gasSchedule == nil {
 		gasSchedule = config.MakeGasMapForTests()
@@ -351,7 +351,7 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.
 	return host
 }
 
-func DefaultTestArwenWithGasSchedule(
+func DefaultTestVMWithGasSchedule(
 	tb testing.TB,
 	blockchain vmcommon.BlockchainHook,
 	customGasSchedule config.GasScheduleMap,

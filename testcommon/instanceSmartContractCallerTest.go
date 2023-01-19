@@ -86,7 +86,7 @@ func (callerTest *InstancesTestTemplate) AndAssertResults(assertResults func(vmh
 
 func runTestWithInstances(callerTest *InstancesTestTemplate) {
 
-	host, blockchainHookStub := defaultTestArwenForContracts(callerTest.t, callerTest.contracts)
+	host, blockchainHookStub := defaultTestVMForContracts(callerTest.t, callerTest.contracts)
 
 	callerTest.setup(host, blockchainHookStub)
 

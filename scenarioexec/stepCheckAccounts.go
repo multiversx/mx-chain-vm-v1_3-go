@@ -16,7 +16,7 @@ import (
 )
 
 // ExecuteCheckStateStep executes a CheckStateStep defined by the current scenario.
-func (ae *ArwenTestExecutor) ExecuteCheckStateStep(step *mj.CheckStateStep) error {
+func (ae *VMTestExecutor) ExecuteCheckStateStep(step *mj.CheckStateStep) error {
 	if len(step.Comment) > 0 {
 		log.Trace("CheckStateStep", "comment", step.Comment)
 	}
@@ -24,7 +24,7 @@ func (ae *ArwenTestExecutor) ExecuteCheckStateStep(step *mj.CheckStateStep) erro
 	return ae.checkAccounts(step.CheckAccounts)
 }
 
-func (ae *ArwenTestExecutor) checkAccounts(checkAccounts *mj.CheckAccounts) error {
+func (ae *VMTestExecutor) checkAccounts(checkAccounts *mj.CheckAccounts) error {
 	if !checkAccounts.MoreAccountsAllowed {
 		for worldAcctAddr := range ae.World.AcctMap {
 			postAcctMatch := mj.FindCheckAccount(checkAccounts.Accounts, []byte(worldAcctAddr))
@@ -106,7 +106,7 @@ func (ae *ArwenTestExecutor) checkAccounts(checkAccounts *mj.CheckAccounts) erro
 	return nil
 }
 
-func (ae *ArwenTestExecutor) checkAccountStorage(expectedAcct *mj.CheckAccount, matchingAcct *worldmock.Account) error {
+func (ae *VMTestExecutor) checkAccountStorage(expectedAcct *mj.CheckAccount, matchingAcct *worldmock.Account) error {
 	if expectedAcct.IgnoreStorage {
 		return nil
 	}
@@ -158,7 +158,7 @@ func (ae *ArwenTestExecutor) checkAccountStorage(expectedAcct *mj.CheckAccount, 
 	return nil
 }
 
-func (ae *ArwenTestExecutor) checkAccountESDT(expectedAcct *mj.CheckAccount, matchingAcct *worldmock.Account) error {
+func (ae *VMTestExecutor) checkAccountESDT(expectedAcct *mj.CheckAccount, matchingAcct *worldmock.Account) error {
 	if expectedAcct.IgnoreESDT {
 		return nil
 	}
@@ -221,7 +221,7 @@ func getExpectedTokens(expectedAcct *mj.CheckAccount) map[string]*mj.CheckESDTDa
 	return expectedTokens
 }
 
-func (ae *ArwenTestExecutor) checkTokenState(
+func (ae *VMTestExecutor) checkTokenState(
 	accountAddress string,
 	tokenName string,
 	expectedToken *mj.CheckESDTData,
@@ -244,7 +244,7 @@ func (ae *ArwenTestExecutor) checkTokenState(
 	return errors
 }
 
-func (ae *ArwenTestExecutor) checkTokenInstances(
+func (ae *VMTestExecutor) checkTokenInstances(
 	accountAddress string,
 	tokenName string,
 	expectedToken *mj.CheckESDTData,

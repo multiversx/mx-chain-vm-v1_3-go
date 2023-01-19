@@ -12,7 +12,7 @@ const increment = "increment"
 
 func TestExecution_PanicInGoWithSilentWasmer_SIGSEGV(t *testing.T) {
 	code := test.GetTestSCCode("counter", "../../../")
-	host, blockchain := test.DefaultTestArwenForCallSigSegv(t, code, big.NewInt(1), true)
+	host, blockchain := test.DefaultTestVMForCallSigSegv(t, code, big.NewInt(1), true)
 
 	blockchain.GetStorageDataCalled = func(_ []byte, _ []byte) ([]byte, uint32, error) {
 		var i *int

@@ -17,13 +17,13 @@ import (
 	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
-var log = logger.GetOrCreate("arwen/scenarios")
+var log = logger.GetOrCreate("vm/scenarios")
 
 // TestVMType is the VM type argument we use in tests.
 var TestVMType = []byte{0, 0}
 
-// ArwenTestExecutor parses, interprets and executes both .test.json tests and .scen.json scenarios with Arwen.
-type ArwenTestExecutor struct {
+// VMTestExecutor parses, interprets and executes both .test.json tests and .scen.json scenarios with VM.
+type VMTestExecutor struct {
 	World                   *worldhook.MockWorld
 	vm                      vmi.VMExecutionHandler
 	checkGas                bool
@@ -32,11 +32,11 @@ type ArwenTestExecutor struct {
 	exprReconstructor       er.ExprReconstructor
 }
 
-var _ mc.TestExecutor = (*ArwenTestExecutor)(nil)
-var _ mc.ScenarioExecutor = (*ArwenTestExecutor)(nil)
+var _ mc.TestExecutor = (*VMTestExecutor)(nil)
+var _ mc.ScenarioExecutor = (*VMTestExecutor)(nil)
 
-// NewArwenTestExecutor prepares a new ArwenTestExecutor instance.
-func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
+// NewVMTestExecutor prepares a new VMTestExecutor instance.
+func NewVMTestExecutor() (*VMTestExecutor, error) {
 	world := worldhook.NewMockWorld()
 
 	gasScheduleMap := config.MakeGasMapForTests()
@@ -63,7 +63,7 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 		return nil, err
 	}
 
-	return &ArwenTestExecutor{
+	return &VMTestExecutor{
 		World:                   world,
 		vm:                      vm,
 		checkGas:                true,
@@ -74,11 +74,11 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 }
 
 // GetVM yields a reference to the VMExecutionHandler used.
-func (ae *ArwenTestExecutor) GetVM() vmi.VMExecutionHandler {
+func (ae *VMTestExecutor) GetVM() vmi.VMExecutionHandler {
 	return ae.vm
 }
 
-func (ae *ArwenTestExecutor) gasScheduleMapFromMandos(mandosGasSchedule mj.GasSchedule) (config.GasScheduleMap, error) {
+func (ae *VMTestExecutor) gasScheduleMapFromMandos(mandosGasSchedule mj.GasSchedule) (config.GasScheduleMap, error) {
 	switch mandosGasSchedule {
 	case mj.GasScheduleDefault:
 		return gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV3())
@@ -98,7 +98,7 @@ func (ae *ArwenTestExecutor) gasScheduleMapFromMandos(mandosGasSchedule mj.GasSc
 // SetMandosGasSchedule updates the gas costs based on the mandos scenario config
 // only changes the gas schedule once,
 // this prevents subsequent gasSchedule declarations in externalSteps to overwrite
-func (ae *ArwenTestExecutor) SetMandosGasSchedule(newGasSchedule mj.GasSchedule) error {
+func (ae *VMTestExecutor) SetMandosGasSchedule(newGasSchedule mj.GasSchedule) error {
 	if ae.mandosGasScheduleLoaded {
 		return nil
 	}

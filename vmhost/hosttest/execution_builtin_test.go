@@ -23,7 +23,7 @@ import (
 func TestExecution_ExecuteOnDestContext_ESDTTransferWithoutExecute(t *testing.T) {
 	code := test.GetTestSCCodeModule("exec-dest-ctx-esdt/basic", "basic", "../../")
 	scBalance := big.NewInt(1000)
-	host, world := test.DefaultTestArwenForCallWithWorldMock(t, code, scBalance)
+	host, world := test.DefaultTestVMForCallWithWorldMock(t, code, scBalance)
 
 	tokenKey := worldmock.MakeTokenKey(test.ESDTTestTokenName, 0)
 	err := world.BuiltinFuncs.SetTokenData(test.ParentAddress, tokenKey, &esdt.ESDigitalToken{
@@ -192,7 +192,7 @@ func TestESDT_GettersAPI(t *testing.T) {
 }
 
 func TestESDT_GettersAPI_ExecuteAfterBuiltinCall(t *testing.T) {
-	host, world := test.DefaultTestArwenWithWorldMock(t)
+	host, world := test.DefaultTestVMWithWorldMock(t)
 
 	initialESDTTokenBalance := uint64(1000)
 
@@ -210,7 +210,7 @@ func TestESDT_GettersAPI_ExecuteAfterBuiltinCall(t *testing.T) {
 	exchange := world.AcctMap.CreateSmartContractAccount(test.UserAddress, exchangeAddress, exchangeCode, world)
 	exchange.Balance = big.NewInt(1000)
 
-	// Prepare Arwen to appear as if the parent contract is being executed
+	// Prepare VM to appear as if the parent contract is being executed
 	input := test.DefaultTestContractCallInput()
 	host.Runtime().InitStateFromContractCallInput(input)
 	_ = host.Runtime().StartWasmerInstance(dummyCode, input.GasProvided, true)

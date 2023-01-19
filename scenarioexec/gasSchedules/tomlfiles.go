@@ -40,7 +40,7 @@ const (
     AoTPreparePerByte = 50
     GetCode           = 100000
 
-[ElrondAPICost]
+[BaseOpsAPICost]
     GetSCAddress       = 100
     GetOwnerAddress    = 100
     IsSmartContract    = 100
@@ -652,7 +652,7 @@ const (
     AoTPreparePerByte = 300
     GetCode           = 1000000
 
-[ElrondAPICost]
+[BaseOpsAPICost]
     GetSCAddress       = 100
     GetOwnerAddress    = 5000
     IsSmartContract    = 5000
@@ -1266,7 +1266,7 @@ const (
     AoTPreparePerByte = 300
     GetCode           = 1000000
 
-[ElrondAPICost]
+[BaseOpsAPICost]
     GetSCAddress       = 100
     GetOwnerAddress    = 5000
     IsSmartContract    = 5000

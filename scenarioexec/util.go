@@ -149,7 +149,7 @@ func convertBlockInfo(testBlockInfo *mj.BlockInfo) *worldmock.BlockInfo {
 }
 
 // this is a small hack, so we can reuse mandos's JSON printing in error messages
-func (ae *ArwenTestExecutor) convertLogToTestFormat(outputLog *vmcommon.LogEntry) *mj.LogEntry {
+func (ae *VMTestExecutor) convertLogToTestFormat(outputLog *vmcommon.LogEntry) *mj.LogEntry {
 	testLog := mj.LogEntry{
 		Address: mj.JSONCheckBytesReconstructed(
 			outputLog.Address,

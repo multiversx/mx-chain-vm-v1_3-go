@@ -10,7 +10,7 @@ import (
 	oj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/orderedjson"
 )
 
-func (ae *ArwenTestExecutor) checkTxResults(
+func (ae *VMTestExecutor) checkTxResults(
 	txIndex string,
 	blResult *mj.TransactionResult,
 	checkGas bool,
