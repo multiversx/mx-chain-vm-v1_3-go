@@ -311,7 +311,7 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	require.Nil(tb, err)
 
 	addressGenerator := &worldmock.AddressGeneratorStub{}
-	host, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,
@@ -324,6 +324,7 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	require.Nil(tb, err)
 	require.NotNil(tb, host)
@@ -338,7 +339,7 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook, address
 		gasSchedule = config.MakeGasMapForTests()
 	}
 
-	host, err := arwenHost.NewArwenVM(blockchain, addressGenerator, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,
@@ -351,6 +352,7 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook, address
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	require.Nil(tb, err)
 	require.NotNil(tb, host)
@@ -370,7 +372,7 @@ func DefaultTestArwenWithGasSchedule(
 	}
 	addressGenerator := &worldmock.AddressGeneratorStub{}
 
-	host, err := arwenHost.NewArwenVM(blockchain, addressGenerator, &arwen.VMHostParameters{
+	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
 		VMType:                   DefaultVMType,
 		BlockGasLimit:            uint64(1000),
 		GasSchedule:              gasSchedule,
@@ -394,6 +396,7 @@ func DefaultTestArwenWithGasSchedule(
 			IsCheckExecuteOnReadOnlyFlagEnabledField:             true,
 		},
 		WasmerSIGSEGVPassthrough: wasmerSIGSEGVPassthrough,
+		AddressGenerator:         addressGenerator,
 	})
 	require.Nil(tb, err)
 	require.NotNil(tb, host)

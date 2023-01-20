@@ -49,7 +49,7 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 	}
 
 	blockGasLimit := uint64(10000000)
-	vm, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
+	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
 		VMType:                   TestVMType,
 		BlockGasLimit:            blockGasLimit,
 		GasSchedule:              gasScheduleMap,
@@ -61,6 +61,7 @@ func NewArwenTestExecutor() (*ArwenTestExecutor, error) {
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	if err != nil {
 		return nil, err

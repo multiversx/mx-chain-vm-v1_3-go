@@ -44,7 +44,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
 	addressGenerator := &worldhook.AddressGeneratorStub{}
-	vm, err := arwenHost.NewArwenVM(world, addressGenerator, &arwen.VMHostParameters{
+	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
 		VMType:                   testVMType,
 		BlockGasLimit:            blockGasLimit,
 		GasSchedule:              gasSchedule,
@@ -56,6 +56,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	if err != nil {
 		return nil, err

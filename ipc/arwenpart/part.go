@@ -39,14 +39,13 @@ func NewArwenPart(
 	if err != nil {
 		return nil, err
 	}
-	addressGenerator, err := addressGenerator.NewAddressGenerator(converter)
+	vmHostParameters.AddressGenerator, err = addressGenerator.NewAddressGenerator(converter)
 	if err != nil {
 		return nil, err
 	}
 
 	newArwenHost, err := host.NewArwenVM(
 		blockchain,
-		addressGenerator,
 		vmHostParameters,
 	)
 	if err != nil {
