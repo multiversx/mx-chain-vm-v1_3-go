@@ -7,11 +7,12 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
 	logger "github.com/ElrondNetwork/elrond-go-logger"
 	"github.com/ElrondNetwork/elrond-go-logger/pipes"
 	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/common"
+	"github.com/ElrondNetwork/wasm-vm-v1_3/ipc/marshaling"
 )
 
 var log = logger.GetOrCreate("arwenDriver")
@@ -21,6 +22,7 @@ var _ vmcommon.VMExecutionHandler = (*ArwenDriver)(nil)
 // ArwenDriver manages the execution of the Arwen process
 type ArwenDriver struct {
 	blockchainHook      vmcommon.BlockchainHook
+	addressGenerator    arwen.AddressGenerator
 	arwenArguments      common.ArwenArguments
 	config              Config
 	logsMarshalizer     marshaling.Marshalizer
@@ -53,6 +55,7 @@ type ArwenDriver struct {
 // NewArwenDriver creates a new driver
 func NewArwenDriver(
 	blockchainHook vmcommon.BlockchainHook,
+	addressGenerator arwen.AddressGenerator,
 	arwenArguments common.ArwenArguments,
 	config Config,
 ) (*ArwenDriver, error) {
@@ -60,6 +63,7 @@ func NewArwenDriver(
 
 	driver := &ArwenDriver{
 		blockchainHook:      blockchainHook,
+		addressGenerator:    addressGenerator,
 		arwenArguments:      arwenArguments,
 		config:              config,
 		logsMarshalizer:     marshaling.CreateMarshalizer(arwenArguments.LogsMarshalizer),
@@ -127,6 +131,7 @@ func (driver *ArwenDriver) startArwen() error {
 		driver.arwenOutputRead,
 		driver.arwenInputWrite,
 		driver.blockchainHook,
+		driver.addressGenerator,
 		driver.config,
 		driver.messagesMarshalizer,
 	)

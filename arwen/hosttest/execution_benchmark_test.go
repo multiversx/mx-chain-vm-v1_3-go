@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ElrondNetwork/elrond-go-core/data/vm"
+	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
+	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
 	gasSchedules "github.com/ElrondNetwork/wasm-vm-v1_3/arwenmandos/gasSchedules"
 	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
 	testcommon "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	"github.com/stretchr/testify/require"
 )
 
@@ -90,6 +90,9 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.
 
 	gasMap, err := gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV2())
 	require.Nil(tb, err)
+	addressGenerator := &worldmock.AddressGeneratorStub{
+		NewAddressCalled: mockWorld.CreateMockWorldNewAddress,
+	}
 
 	host, err := arwenHost.NewArwenVM(mockWorld, &arwen.VMHostParameters{
 		VMType:                   testcommon.DefaultVMType,
@@ -103,6 +106,7 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (arwen.VMHost, *worldmock.
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	require.Nil(tb, err)
 

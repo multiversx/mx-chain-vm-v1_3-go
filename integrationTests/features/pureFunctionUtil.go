@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
+	vmi "github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
+	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	arwen "github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
 	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
 	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
 	mj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/json/model"
 	worldhook "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	vmi "github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,6 +43,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
+	addressGenerator := &worldhook.AddressGeneratorStub{}
 	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
 		VMType:                   testVMType,
 		BlockGasLimit:            blockGasLimit,
@@ -55,6 +56,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 			IsRepairCallbackFlagEnabledField:      true,
 			IsBuiltInFunctionsFlagEnabledField:    true,
 		},
+		AddressGenerator: addressGenerator,
 	})
 	if err != nil {
 		return nil, err
