@@ -1,8 +1,8 @@
 package nodepart
 
 import (
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
 
 func (part *NodePart) replyToBlockchainNewAddress(request common.MessageHandler) common.MessageHandler {
@@ -133,7 +133,7 @@ func (part *NodePart) replyToBlockchainGetUserAccount(request common.MessageHand
 	typedRequest := request.(*common.MessageBlockchainGetUserAccountRequest)
 	result, err := part.blockchain.GetUserAccount(typedRequest.Address)
 
-	if err != nil || arwen.IfNil(result) {
+	if err != nil || vmhost.IfNil(result) {
 		return common.NewMessageBlockchainGetUserAccountResponse(nil, err)
 	}
 

@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/multiversx/mx-chain-vm-common-go"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
 	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
 
 // InstanceTestSmartContract represents the config data for the smart contract instance to be tested
@@ -45,8 +45,8 @@ func (mockSC *InstanceTestSmartContract) WithCode(code []byte) *InstanceTestSmar
 type InstancesTestTemplate struct {
 	testTemplateConfig
 	contracts     []*InstanceTestSmartContract
-	setup         func(arwen.VMHost, *contextmock.BlockchainHookStub)
-	assertResults func(arwen.VMHost, *contextmock.BlockchainHookStub, *VMOutputVerifier)
+	setup         func(vmhost.VMHost, *contextmock.BlockchainHookStub)
+	assertResults func(vmhost.VMHost, *contextmock.BlockchainHookStub, *VMOutputVerifier)
 }
 
 // BuildInstanceCallTest starts the building process for a contract call test
@@ -56,7 +56,7 @@ func BuildInstanceCallTest(t *testing.T) *InstancesTestTemplate {
 			t:        t,
 			useMocks: false,
 		},
-		setup: func(arwen.VMHost, *contextmock.BlockchainHookStub) {},
+		setup: func(vmhost.VMHost, *contextmock.BlockchainHookStub) {},
 	}
 }
 
@@ -73,20 +73,20 @@ func (callerTest *InstancesTestTemplate) WithInput(input *vmcommon.ContractCallI
 }
 
 // WithSetup provides the setup function to be used by the contract call test
-func (callerTest *InstancesTestTemplate) WithSetup(setup func(arwen.VMHost, *contextmock.BlockchainHookStub)) *InstancesTestTemplate {
+func (callerTest *InstancesTestTemplate) WithSetup(setup func(vmhost.VMHost, *contextmock.BlockchainHookStub)) *InstancesTestTemplate {
 	callerTest.setup = setup
 	return callerTest
 }
 
 // AndAssertResults provides the function that will aserts the results
-func (callerTest *InstancesTestTemplate) AndAssertResults(assertResults func(arwen.VMHost, *contextmock.BlockchainHookStub, *VMOutputVerifier)) {
+func (callerTest *InstancesTestTemplate) AndAssertResults(assertResults func(vmhost.VMHost, *contextmock.BlockchainHookStub, *VMOutputVerifier)) {
 	callerTest.assertResults = assertResults
 	runTestWithInstances(callerTest)
 }
 
 func runTestWithInstances(callerTest *InstancesTestTemplate) {
 
-	host, blockchainHookStub := defaultTestArwenForContracts(callerTest.t, callerTest.contracts)
+	host, blockchainHookStub := defaultTestVMForContracts(callerTest.t, callerTest.contracts)
 
 	callerTest.setup(host, blockchainHookStub)
 

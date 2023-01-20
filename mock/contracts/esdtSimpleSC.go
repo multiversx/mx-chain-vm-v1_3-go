@@ -5,9 +5,9 @@ import (
 	"math/big"
 
 	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/arwen/elrondapi"
 	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/vmhooks"
 )
 
 // ExecESDTTransferAndCallChild is an exposed mock contract method
@@ -71,7 +71,7 @@ func ExecESDTTransferWithAPICall(instanceMock *mock.InstanceMock, config interfa
 		functionName := arguments[1]
 		args := [][]byte{arguments[2]}
 
-		elrondapi.TransferESDTNFTExecuteWithTypedArgs(
+		vmhooks.TransferESDTNFTExecuteWithTypedArgs(
 			host,
 			big.NewInt(int64(testConfig.ESDTTokensToTransfer)),
 			test.ESDTTestTokenName,

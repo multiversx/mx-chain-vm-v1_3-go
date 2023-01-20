@@ -10,11 +10,11 @@ import (
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	arwen "github.com/multiversx/mx-chain-vm-v1_3-go/arwen"
-	arwenHost "github.com/multiversx/mx-chain-vm-v1_3-go/arwen/host"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
-	mj "github.com/multiversx/mx-chain-vm-v1_3-go/mandos-go/json/model"
 	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,12 +43,12 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
-	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
+	vm, err := hostCore.NewVMHost(world, &vmhost.VMHostParameters{
 		VMType:               testVMType,
 		BlockGasLimit:        blockGasLimit,
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("ELROND"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
