@@ -10,11 +10,11 @@ import (
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
-	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
-	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/require"
 )
 
@@ -48,7 +48,7 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 		BlockGasLimit:        blockGasLimit,
 		GasSchedule:          gasSchedule,
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,

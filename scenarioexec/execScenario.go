@@ -17,7 +17,7 @@ func (ae *VMTestExecutor) Reset() {
 func (ae *VMTestExecutor) ExecuteScenario(scenario *mj.Scenario, fileResolver fr.FileResolver) error {
 	ae.fileResolver = fileResolver
 	ae.checkGas = scenario.CheckGas
-	err := ae.SetMandosGasSchedule(scenario.GasSchedule)
+	err := ae.SetScenariosGasSchedule(scenario.GasSchedule)
 	if err != nil {
 		return err
 	}
@@ -84,12 +84,12 @@ func (ae *VMTestExecutor) ExecuteSetStateStep(step *mj.SetStateStep) error {
 	}
 
 	// append accounts
-	for _, mandosAccount := range step.Accounts {
-		worldAccount, err := convertAccount(mandosAccount, ae.World)
+	for _, scenAccount := range step.Accounts {
+		worldAccount, err := convertAccount(scenAccount, ae.World)
 		if err != nil {
 			return err
 		}
-		err = validateSetStateAccount(mandosAccount, worldAccount)
+		err = validateSetStateAccount(scenAccount, worldAccount)
 		if err != nil {
 			return err
 		}

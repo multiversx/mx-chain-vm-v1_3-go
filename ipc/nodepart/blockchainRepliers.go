@@ -1,8 +1,8 @@
 package nodepart
 
 import (
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
 
 func (part *NodePart) replyToBlockchainNewAddress(request common.MessageHandler) common.MessageHandler {

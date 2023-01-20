@@ -11,12 +11,12 @@ import (
 	"testing"
 
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	am "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec"
 	fr "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/fileresolver"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	mjparse "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/parse"
 	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/write"
-	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/stretchr/testify/require"
 )
 
@@ -42,10 +42,10 @@ type fuzzDelegationExecutorInitArgs struct {
 
 type fuzzDelegationExecutor struct {
 	vmTestExecutor *am.VMTestExecutor
-	world             *worldhook.MockWorld
-	vm                vmi.VMExecutionHandler
-	parser      mjparse.Parser
-	txIndex           int
+	world          *worldhook.MockWorld
+	vm             vmi.VMExecutionHandler
+	parser         mjparse.Parser
+	txIndex        int
 
 	serviceFee                  int
 	numBlocksBeforeForceUnstake int
@@ -70,16 +70,16 @@ func newFuzzDelegationExecutor(fileResolver fr.FileResolver) (*fuzzDelegationExe
 	if err != nil {
 		return nil, err
 	}
-	mandosGasSchedule := mj.GasScheduleV3
-	vmTestExecutor.SetMandosGasSchedule(mandosGasSchedule)
+	scenGasSchedule := mj.GasScheduleV3
+	vmTestExecutor.SetScenariosGasSchedule(scenGasSchedule)
 
 	parser := mjparse.NewParser(fileResolver)
 
 	return &fuzzDelegationExecutor{
-		vmTestExecutor:   vmTestExecutor,
+		vmTestExecutor:      vmTestExecutor,
 		world:               vmTestExecutor.World,
 		vm:                  vmTestExecutor.GetVM(),
-		parser:        parser,
+		parser:              parser,
 		txIndex:             0,
 		numNodes:            0,
 		totalStakeAdded:     big.NewInt(0),
@@ -87,7 +87,7 @@ func newFuzzDelegationExecutor(fileResolver fr.FileResolver) (*fuzzDelegationExe
 		totalRewards:        big.NewInt(0),
 		generatedScenario: &mj.Scenario{
 			Name:        "fuzz generated",
-			GasSchedule: mandosGasSchedule,
+			GasSchedule: scenGasSchedule,
 		},
 	}, nil
 }

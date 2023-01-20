@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	am "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec"
 	fr "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/fileresolver"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	mjparse "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/parse"
 	mjwrite "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/write"
-	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"io/ioutil"
 )
 
@@ -64,10 +64,10 @@ type FarmerInfo struct {
 
 type fuzzDexExecutor struct {
 	vmTestExecutor *am.VMTestExecutor
-	world             *worldhook.MockWorld
-	vm                vmi.VMExecutionHandler
-	parser      mjparse.Parser
-	txIndex           int
+	world          *worldhook.MockWorld
+	vm             vmi.VMExecutionHandler
+	parser         mjparse.Parser
+	txIndex        int
 
 	wegldTokenId            string
 	mexTokenId              string
@@ -149,10 +149,10 @@ func newFuzzDexExecutor(fileResolver fr.FileResolver) (*fuzzDexExecutor, error) 
 
 	return &fuzzDexExecutor{
 		vmTestExecutor: vmTestExecutor,
-		world:             vmTestExecutor.World,
-		vm:                vmTestExecutor.GetVM(),
-		parser:      parser,
-		txIndex:           0,
+		world:          vmTestExecutor.World,
+		vm:             vmTestExecutor.GetVM(),
+		parser:         parser,
+		txIndex:        0,
 		generatedScenario: &mj.Scenario{
 			Name: "fuzz generated",
 		},

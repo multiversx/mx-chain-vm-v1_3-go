@@ -6,10 +6,10 @@ import (
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 )
 
 type worldDataModel struct {
@@ -55,7 +55,7 @@ func getHostParameters() *vmhost.VMHostParameters {
 		VMType:               []byte{5, 0},
 		BlockGasLimit:        uint64(10000000),
 		GasSchedule:          config.MakeGasMap(1, 1),
-		ProtectedKeyPrefix:   []byte("E"+"L"+"R"+"O"+"N"+"D"),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,

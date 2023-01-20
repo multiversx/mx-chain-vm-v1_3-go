@@ -6,15 +6,15 @@ import (
 	logger "github.com/multiversx/mx-chain-logger-go"
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
-	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
-	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	gasSchedules "github.com/multiversx/mx-chain-vm-v1_3-go/scenarioexec/gasSchedules"
 	mc "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/controller"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
 	fr "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/fileresolver"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
-	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 )
 
 var log = logger.GetOrCreate("vm/scenarios")
@@ -24,12 +24,12 @@ var TestVMType = []byte{0, 0}
 
 // VMTestExecutor parses, interprets and executes both .test.json tests and .scen.json scenarios with VM.
 type VMTestExecutor struct {
-	World                   *worldhook.MockWorld
-	vm                      vmi.VMExecutionHandler
-	checkGas                bool
-	mandosGasScheduleLoaded bool
-	fileResolver            fr.FileResolver
-	exprReconstructor       er.ExprReconstructor
+	World                 *worldhook.MockWorld
+	vm                    vmi.VMExecutionHandler
+	checkGas              bool
+	scenGasScheduleLoaded bool
+	fileResolver          fr.FileResolver
+	exprReconstructor     er.ExprReconstructor
 }
 
 var _ mc.TestExecutor = (*VMTestExecutor)(nil)
@@ -64,12 +64,12 @@ func NewVMTestExecutor() (*VMTestExecutor, error) {
 	}
 
 	return &VMTestExecutor{
-		World:                   world,
-		vm:                      vm,
-		checkGas:                true,
-		mandosGasScheduleLoaded: false,
-		fileResolver:            nil,
-		exprReconstructor:       er.ExprReconstructor{},
+		World:                 world,
+		vm:                    vm,
+		checkGas:              true,
+		scenGasScheduleLoaded: false,
+		fileResolver:          nil,
+		exprReconstructor:     er.ExprReconstructor{},
 	}, nil
 }
 
@@ -78,8 +78,8 @@ func (ae *VMTestExecutor) GetVM() vmi.VMExecutionHandler {
 	return ae.vm
 }
 
-func (ae *VMTestExecutor) gasScheduleMapFromMandos(mandosGasSchedule mj.GasSchedule) (config.GasScheduleMap, error) {
-	switch mandosGasSchedule {
+func (ae *VMTestExecutor) gasScheduleMapFromScenarios(scenGasSchedule mj.GasSchedule) (config.GasScheduleMap, error) {
+	switch scenGasSchedule {
 	case mj.GasScheduleDefault:
 		return gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV3())
 	case mj.GasScheduleDummy:
@@ -91,22 +91,22 @@ func (ae *VMTestExecutor) gasScheduleMapFromMandos(mandosGasSchedule mj.GasSched
 	case mj.GasScheduleV3:
 		return gasSchedules.LoadGasScheduleConfig(gasSchedules.GetV3())
 	default:
-		return nil, fmt.Errorf("unknown mandos GasSchedule: %d", mandosGasSchedule)
+		return nil, fmt.Errorf("unknown scenario GasSchedule: %d", scenGasSchedule)
 	}
 }
 
-// SetMandosGasSchedule updates the gas costs based on the mandos scenario config
+// SetScenariosGasSchedule updates the gas costs based on the scenario config
 // only changes the gas schedule once,
 // this prevents subsequent gasSchedule declarations in externalSteps to overwrite
-func (ae *VMTestExecutor) SetMandosGasSchedule(newGasSchedule mj.GasSchedule) error {
-	if ae.mandosGasScheduleLoaded {
+func (ae *VMTestExecutor) SetScenariosGasSchedule(newGasSchedule mj.GasSchedule) error {
+	if ae.scenGasScheduleLoaded {
 		return nil
 	}
-	gasSchedule, err := ae.gasScheduleMapFromMandos(newGasSchedule)
+	gasSchedule, err := ae.gasScheduleMapFromScenarios(newGasSchedule)
 	if err != nil {
 		return err
 	}
-	ae.mandosGasScheduleLoaded = true
+	ae.scenGasScheduleLoaded = true
 	ae.vm.GasScheduleChange(gasSchedule)
 	return nil
 }

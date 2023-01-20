@@ -1,6 +1,6 @@
 package worldmock
 
-//TODO delete this when we have elrond-go-core
+//TODO delete this when we have multiversx-core
 
 import (
 	"errors"
