@@ -6,7 +6,7 @@ import (
 
 	"github.com/multiversx/mx-chain-core-go/core/check"
 	logger "github.com/multiversx/mx-chain-logger-go"
-	"github.com/multiversx/mx-chain-vm-common-go"
+	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/math"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
@@ -18,7 +18,7 @@ type storageContext struct {
 	blockChainHook             vmcommon.BlockchainHook
 	address                    []byte
 	stateStack                 [][]byte
-	ProtectedKeyPrefix         []byte
+	protectedKeyPrefix         []byte
 	vmStorageProtectionEnabled bool
 }
 
@@ -26,16 +26,16 @@ type storageContext struct {
 func NewStorageContext(
 	host vmhost.VMHost,
 	blockChainHook vmcommon.BlockchainHook,
-	ProtectedKeyPrefix []byte,
+	protectedKeyPrefix []byte,
 ) (*storageContext, error) {
-	if len(ProtectedKeyPrefix) == 0 {
+	if len(protectedKeyPrefix) == 0 {
 		return nil, errors.New("ProtectedKeyPrefix cannot be empty")
 	}
 	context := &storageContext{
 		host:                       host,
 		blockChainHook:             blockChainHook,
 		stateStack:                 make([][]byte, 0),
-		ProtectedKeyPrefix:         ProtectedKeyPrefix,
+		protectedKeyPrefix:         protectedKeyPrefix,
 		vmStorageProtectionEnabled: true,
 	}
 
@@ -190,7 +190,7 @@ func (context *storageContext) isVMProtectedKey(key []byte) bool {
 }
 
 func (context *storageContext) isProtocolProtectedKey(key []byte) bool {
-	return bytes.HasPrefix(key, context.ProtectedKeyPrefix)
+	return bytes.HasPrefix(key, context.protectedKeyPrefix)
 }
 
 func (context *storageContext) SetProtectedStorage(key []byte, value []byte) (vmhost.StorageStatus, error) {

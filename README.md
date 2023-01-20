@@ -1,4 +1,4 @@
-# wasm-vm
+# mx-chain-vm-v1_3-go
 
 [![](https://img.shields.io/badge/made%20by-MultiversX-blue.svg)](http://multiversx.com/)
 ![Build](https://github.com/multiversx/mx-chain-vm-v1_3-go/actions/workflows/build-test.yml/badge.svg?branch=master)
