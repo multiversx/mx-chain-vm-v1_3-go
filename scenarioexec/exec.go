@@ -3,6 +3,7 @@ package scenarioexec
 import (
 	"fmt"
 
+	"github.com/multiversx/mx-chain-core-go/core"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/mock"
@@ -51,7 +52,7 @@ func NewVMTestExecutor() (*VMTestExecutor, error) {
 		BlockGasLimit:        blockGasLimit,
 		GasSchedule:          gasScheduleMap,
 		BuiltInFuncContainer: world.BuiltinFuncs.Container,
-		ProtectedKeyPrefix:   []byte(ProtectedKeyPrefix),
+		ProtectedKeyPrefix:   []byte(core.ProtectedKeyPrefix),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
