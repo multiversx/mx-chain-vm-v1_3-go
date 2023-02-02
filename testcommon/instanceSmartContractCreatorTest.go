@@ -3,9 +3,9 @@ package testcommon
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
 
 // TestCreateTemplateConfig holds the data to build a contract creation test
@@ -13,7 +13,7 @@ type TestCreateTemplateConfig struct {
 	t             *testing.T
 	address       []byte
 	input         *vmcommon.ContractCreateInput
-	setup         func(arwen.VMHost, *contextmock.BlockchainHookStub)
+	setup         func(vmhost.VMHost, *contextmock.BlockchainHookStub)
 	assertResults func(*contextmock.BlockchainHookStub, *VMOutputVerifier)
 }
 
@@ -21,7 +21,7 @@ type TestCreateTemplateConfig struct {
 func BuildInstanceCreatorTest(t *testing.T) *TestCreateTemplateConfig {
 	return &TestCreateTemplateConfig{
 		t:     t,
-		setup: func(arwen.VMHost, *contextmock.BlockchainHookStub) {},
+		setup: func(vmhost.VMHost, *contextmock.BlockchainHookStub) {},
 	}
 }
 
@@ -38,7 +38,7 @@ func (callerTest *TestCreateTemplateConfig) WithAddress(address []byte) *TestCre
 }
 
 // WithSetup provides the setup function for a TestCreateTemplateConfig
-func (callerTest *TestCreateTemplateConfig) WithSetup(setup func(arwen.VMHost, *contextmock.BlockchainHookStub)) *TestCreateTemplateConfig {
+func (callerTest *TestCreateTemplateConfig) WithSetup(setup func(vmhost.VMHost, *contextmock.BlockchainHookStub)) *TestCreateTemplateConfig {
 	callerTest.setup = setup
 	return callerTest
 }
@@ -51,7 +51,7 @@ func (callerTest *TestCreateTemplateConfig) AndAssertResults(assertResults func(
 
 func (callerTest *TestCreateTemplateConfig) runTest() {
 
-	host, stubBlockchainHook := DefaultTestArwenForDeployment(callerTest.t, 24, callerTest.address)
+	host, stubBlockchainHook := DefaultTestVMForDeployment(callerTest.t, 24, callerTest.address)
 	callerTest.setup(host, stubBlockchainHook)
 
 	vmOutput, err := host.RunSmartContractCreate(callerTest.input)

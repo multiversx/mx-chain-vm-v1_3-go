@@ -3,9 +3,9 @@ package contracts
 import (
 	"math/big"
 
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-vm-common/txDataBuilder"
+	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
 	"github.com/stretchr/testify/require"
 )
 

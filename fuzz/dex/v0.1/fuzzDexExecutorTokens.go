@@ -3,11 +3,11 @@ package dex
 import (
 	"math/big"
 
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 )
 
 func (pfe *fuzzDexExecutor) interpretExpr(expression string) []byte {
-	bytes, err := pfe.mandosParser.ExprInterpreter.InterpretString(expression)
+	bytes, err := pfe.parser.ExprInterpreter.InterpretString(expression)
 	if err != nil {
 		panic(err)
 	}

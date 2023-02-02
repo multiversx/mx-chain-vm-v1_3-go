@@ -6,10 +6,10 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
-	"github.com/ElrondNetwork/elrond-vm-common/txDataBuilder"
+	"github.com/multiversx/mx-chain-vm-common-go/txDataBuilder"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/stretchr/testify/require"
 )
 
@@ -115,7 +115,7 @@ func CallBackParentMock(instanceMock *mock.InstanceMock, config interface{}) {
 	})
 }
 
-func handleParentBehaviorArgument(host arwen.VMHost, behavior *big.Int) error {
+func handleParentBehaviorArgument(host vmhost.VMHost, behavior *big.Int) error {
 	if behavior.Cmp(big.NewInt(3)) == 0 {
 		host.Runtime().SignalUserError("callBack error")
 		return errors.New("behavior / parent error")
@@ -153,7 +153,7 @@ func mustTransferToVault(arguments [][]byte) bool {
 	return true
 }
 
-func handleTransferToVault(host arwen.VMHost, arguments [][]byte) error {
+func handleTransferToVault(host vmhost.VMHost, arguments [][]byte) error {
 	err := error(nil)
 	if mustTransferToVault(arguments) {
 		valueToTransfer := big.NewInt(4)
@@ -163,7 +163,7 @@ func handleTransferToVault(host arwen.VMHost, arguments [][]byte) error {
 	return err
 }
 
-func finishResult(host arwen.VMHost, result int) {
+func finishResult(host vmhost.VMHost, result int) {
 	outputContext := host.Output()
 	if result == 0 {
 		outputContext.Finish([]byte("succ"))

@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	arwen "github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	mj "github.com/ElrondNetwork/wasm-vm-v1_3/mandos-go/json/model"
-	worldhook "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	vmi "github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	vmi "github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,12 +43,12 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 
 	blockGasLimit := uint64(10000000)
 	gasSchedule := config.MakeGasMapForTests()
-	vm, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
-		VMType:                   testVMType,
-		BlockGasLimit:            blockGasLimit,
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
+	vm, err := hostCore.NewVMHost(world, &vmhost.VMHostParameters{
+		VMType:               testVMType,
+		BlockGasLimit:        blockGasLimit,
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,

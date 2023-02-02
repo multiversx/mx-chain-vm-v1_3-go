@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/wasmer"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/wasmer"
 )
 
 // InstanceMock is a mock for Wasmer instances; it allows creating mock smart
@@ -18,7 +18,7 @@ type InstanceMock struct {
 	GasLimit        uint64
 	BreakpointValue uint64
 	Memory          wasmer.MemoryHandler
-	Host            arwen.VMHost
+	Host            vmhost.VMHost
 	T               testing.TB
 	Address         []byte
 }
@@ -45,9 +45,9 @@ func (instance *InstanceMock) AddMockMethod(name string, method func() *Instance
 func (instance *InstanceMock) AddMockMethodWithError(name string, method func() *InstanceMock, err error) {
 	wrappedMethod := func(...interface{}) (wasmer.Value, error) {
 		instance := method()
-		if arwen.BreakpointValue(instance.GetBreakpointValue()) != arwen.BreakpointNone {
+		if vmhost.BreakpointValue(instance.GetBreakpointValue()) != vmhost.BreakpointNone {
 			var errMsg string
-			if arwen.BreakpointValue(instance.GetBreakpointValue()) == arwen.BreakpointAsyncCall {
+			if vmhost.BreakpointValue(instance.GetBreakpointValue()) == vmhost.BreakpointAsyncCall {
 				errMsg = "breakpoint"
 			} else {
 				errMsg = instance.Host.Output().GetVMOutput().ReturnMessage
@@ -145,7 +145,7 @@ func (instance *InstanceMock) IsFunctionImported(name string) bool {
 }
 
 // GetMockInstance gets the mock instance from the runtime of the provided host
-func GetMockInstance(host arwen.VMHost) *InstanceMock {
+func GetMockInstance(host vmhost.VMHost) *InstanceMock {
 	instance := host.Runtime().GetInstance().(*InstanceMock)
 	return instance
 }

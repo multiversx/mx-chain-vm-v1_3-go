@@ -1,10 +1,10 @@
 package worldmock
 
 import (
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	"github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 )
 
 // WorldMarshalizer is the global marshalizer to be used by the components of
