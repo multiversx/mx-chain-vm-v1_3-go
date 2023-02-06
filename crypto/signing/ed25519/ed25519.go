@@ -3,7 +3,7 @@ package ed25519
 import (
 	libed25519 "crypto/ed25519"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/crypto/signing"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/crypto/signing"
 )
 
 type ed25519 struct {

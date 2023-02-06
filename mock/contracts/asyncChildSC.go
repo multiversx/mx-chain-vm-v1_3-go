@@ -4,9 +4,9 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	test "github.com/ElrondNetwork/wasm-vm-v1_3/testcommon"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	test "github.com/multiversx/mx-chain-vm-v1_3-go/testcommon"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 	"github.com/stretchr/testify/require"
 )
 
@@ -68,7 +68,7 @@ func TransferToThirdPartyAsyncChildMock(instanceMock *mock.InstanceMock, config 
 	})
 }
 
-func handleChildBehaviorArgument(host arwen.VMHost, behavior byte) error {
+func handleChildBehaviorArgument(host vmhost.VMHost, behavior byte) error {
 	if behavior == 1 {
 		host.Runtime().SignalUserError("child error")
 		return errors.New("behavior / child error")

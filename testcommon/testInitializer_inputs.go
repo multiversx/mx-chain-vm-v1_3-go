@@ -12,20 +12,20 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ElrondNetwork/elrond-go-core/data/vm"
-	logger "github.com/ElrondNetwork/elrond-go-logger"
-	vmcommon "github.com/ElrondNetwork/elrond-vm-common"
-	"github.com/ElrondNetwork/elrond-vm-common/builtInFunctions"
-	"github.com/ElrondNetwork/elrond-vm-common/mock"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	arwenHost "github.com/ElrondNetwork/wasm-vm-v1_3/arwen/host"
-	"github.com/ElrondNetwork/wasm-vm-v1_3/config"
-	contextmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
+	"github.com/multiversx/mx-chain-core-go/data/vm"
+	logger "github.com/multiversx/mx-chain-logger-go"
+	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
+	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
+	"github.com/multiversx/mx-chain-vm-common-go/mock"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/require"
 )
 
-var log = logger.GetOrCreate("arwen/host")
+var log = logger.GetOrCreate("vm/host")
 
 // DefaultVMType is an exposed value to use in tests
 var DefaultVMType = []byte{0xF, 0xF}
@@ -114,8 +114,8 @@ func BuildSCModule(scName string, prefixToTestSCs string) {
 	log.Info("contract built", "output", fmt.Sprintf("\n%s", out))
 }
 
-// DefaultTestArwenForDeployment creates an Arwen vmHost configured for testing deployments
-func DefaultTestArwenForDeployment(t *testing.T, _ uint64, newAddress []byte) (arwen.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForDeployment creates an VM vmHost configured for testing deployments
+func DefaultTestVMForDeployment(t *testing.T, _ uint64, newAddress []byte) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(address []byte) (vmcommon.UserAccountHandler, error) {
 		return &contextmock.StubAccount{
@@ -126,12 +126,12 @@ func DefaultTestArwenForDeployment(t *testing.T, _ uint64, newAddress []byte) (a
 		return newAddress, nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCall creates a BlockchainHookStub
-func DefaultTestArwenForCall(tb testing.TB, code []byte, balance *big.Int) (arwen.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForCall creates a BlockchainHookStub
+func DefaultTestVMForCall(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(scAddress []byte) (vmcommon.UserAccountHandler, error) {
 		if bytes.Equal(scAddress, ParentAddress) {
@@ -145,12 +145,12 @@ func DefaultTestArwenForCall(tb testing.TB, code []byte, balance *big.Int) (arwe
 		return code
 	}
 
-	host := DefaultTestArwen(tb, stubBlockchainHook)
+	host := DefaultTestVM(tb, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCall creates a BlockchainHookStub
-func DefaultTestArwenForCallSigSegv(tb testing.TB, code []byte, balance *big.Int, passthrough bool) (arwen.VMHost, *contextmock.BlockchainHookStub) {
+// DefaultTestVMForCall creates a BlockchainHookStub
+func DefaultTestVMForCallSigSegv(tb testing.TB, code []byte, balance *big.Int, passthrough bool) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 	stubBlockchainHook.GetUserAccountCalled = func(scAddress []byte) (vmcommon.UserAccountHandler, error) {
 		if bytes.Equal(scAddress, ParentAddress) {
@@ -165,14 +165,14 @@ func DefaultTestArwenForCallSigSegv(tb testing.TB, code []byte, balance *big.Int
 	}
 
 	customGasSchedule := config.GasScheduleMap(nil)
-	host := DefaultTestArwenWithGasSchedule(tb, stubBlockchainHook, customGasSchedule, passthrough)
+	host := DefaultTestVMWithGasSchedule(tb, stubBlockchainHook, customGasSchedule, passthrough)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenForCallWithInstanceRecorderMock creates an InstanceBuilderRecorderMock
-func DefaultTestArwenForCallWithInstanceRecorderMock(tb testing.TB, code []byte, balance *big.Int) (arwen.VMHost, *contextmock.InstanceBuilderRecorderMock) {
+// DefaultTestVMForCallWithInstanceRecorderMock creates an InstanceBuilderRecorderMock
+func DefaultTestVMForCallWithInstanceRecorderMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *contextmock.InstanceBuilderRecorderMock) {
 	// this uses a Blockchain Hook Stub that does not cache the compiled code
-	host, _ := DefaultTestArwenForCall(tb, code, balance)
+	host, _ := DefaultTestVMForCall(tb, code, balance)
 
 	instanceBuilderRecorderMock := contextmock.NewInstanceBuilderRecorderMock()
 	host.Runtime().ReplaceInstanceBuilder(instanceBuilderRecorderMock)
@@ -180,10 +180,10 @@ func DefaultTestArwenForCallWithInstanceRecorderMock(tb testing.TB, code []byte,
 	return host, instanceBuilderRecorderMock
 }
 
-// DefaultTestArwenForCallWithInstanceMocks creates an InstanceBuilderMock
-func DefaultTestArwenForCallWithInstanceMocks(tb testing.TB) (arwen.VMHost, *worldmock.MockWorld, *contextmock.InstanceBuilderMock) {
+// DefaultTestVMForCallWithInstanceMocks creates an InstanceBuilderMock
+func DefaultTestVMForCallWithInstanceMocks(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld, *contextmock.InstanceBuilderMock) {
 	world := worldmock.NewMockWorld()
-	host := DefaultTestArwen(tb, world)
+	host := DefaultTestVM(tb, world)
 
 	instanceBuilderMock := contextmock.NewInstanceBuilderMock(world)
 	host.Runtime().ReplaceInstanceBuilder(instanceBuilderMock)
@@ -191,10 +191,10 @@ func DefaultTestArwenForCallWithInstanceMocks(tb testing.TB) (arwen.VMHost, *wor
 	return host, world, instanceBuilderMock
 }
 
-// DefaultTestArwenForCallWithWorldMock creates a MockWorld
-func DefaultTestArwenForCallWithWorldMock(tb testing.TB, code []byte, balance *big.Int) (arwen.VMHost, *worldmock.MockWorld) {
+// DefaultTestVMForCallWithWorldMock creates a MockWorld
+func DefaultTestVMForCallWithWorldMock(tb testing.TB, code []byte, balance *big.Int) (vmhost.VMHost, *worldmock.MockWorld) {
 	world := worldmock.NewMockWorld()
-	host := DefaultTestArwen(tb, world)
+	host := DefaultTestVM(tb, world)
 
 	err := world.InitBuiltinFunctions(host.GetGasScheduleMap())
 	require.Nil(tb, err)
@@ -207,14 +207,14 @@ func DefaultTestArwenForCallWithWorldMock(tb testing.TB, code []byte, balance *b
 	return host, world
 }
 
-// DefaultTestArwenForTwoSCs creates an Arwen vmHost configured for testing calls between 2 SmartContracts
-func DefaultTestArwenForTwoSCs(
+// DefaultTestVMForTwoSCs creates an VM vmHost configured for testing calls between 2 SmartContracts
+func DefaultTestVMForTwoSCs(
 	t *testing.T,
 	parentCode []byte,
 	childCode []byte,
 	parentSCBalance *big.Int,
 	childSCBalance *big.Int,
-) (arwen.VMHost, *contextmock.BlockchainHookStub) {
+) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 
 	if parentSCBalance == nil {
@@ -251,14 +251,14 @@ func DefaultTestArwenForTwoSCs(
 		return nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-func defaultTestArwenForContracts(
+func defaultTestVMForContracts(
 	t *testing.T,
 	contracts []*InstanceTestSmartContract,
-) (arwen.VMHost, *contextmock.BlockchainHookStub) {
+) (vmhost.VMHost, *contextmock.BlockchainHookStub) {
 
 	stubBlockchainHook := &contextmock.BlockchainHookStub{}
 
@@ -290,12 +290,12 @@ func defaultTestArwenForContracts(
 		return nil
 	}
 
-	host := DefaultTestArwen(t, stubBlockchainHook)
+	host := DefaultTestVM(t, stubBlockchainHook)
 	return host, stubBlockchainHook
 }
 
-// DefaultTestArwenWithWorldMock creates a host configured with a mock world
-func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.MockWorld) {
+// DefaultTestVMWithWorldMock creates a host configured with a mock world
+func DefaultTestVMWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.MockWorld) {
 	world := worldmock.NewMockWorld()
 	gasSchedule := customGasSchedule
 	if gasSchedule == nil {
@@ -304,13 +304,13 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	err := world.InitBuiltinFunctions(gasSchedule)
 	require.Nil(tb, err)
 
-	host, err := arwenHost.NewArwenVM(world, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     world.BuiltinFuncs.Container,
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
-		UseWarmInstance:          false,
+	host, err := hostCore.NewVMHost(world, &vmhost.VMHostParameters{
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: world.BuiltinFuncs.Container,
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
+		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
@@ -324,20 +324,20 @@ func DefaultTestArwenWithWorldMock(tb testing.TB) (arwen.VMHost, *worldmock.Mock
 	return host, world
 }
 
-// DefaultTestArwen creates a host configured with a configured blockchain hook
-func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.VMHost {
+// DefaultTestVM creates a host configured with a configured blockchain hook
+func DefaultTestVM(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.VMHost {
 	gasSchedule := customGasSchedule
 	if gasSchedule == nil {
 		gasSchedule = config.MakeGasMapForTests()
 	}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
-		UseWarmInstance:          false,
+	host, err := hostCore.NewVMHost(blockchain, &vmhost.VMHostParameters{
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
+		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsSCDeployFlagEnabledField:            true,
 			IsAheadOfTimeGasUsageFlagEnabledField: true,
@@ -351,23 +351,23 @@ func DefaultTestArwen(tb testing.TB, blockchain vmcommon.BlockchainHook) arwen.V
 	return host
 }
 
-func DefaultTestArwenWithGasSchedule(
+func DefaultTestVMWithGasSchedule(
 	tb testing.TB,
 	blockchain vmcommon.BlockchainHook,
 	customGasSchedule config.GasScheduleMap,
 	wasmerSIGSEGVPassthrough bool,
-) arwen.VMHost {
+) vmhost.VMHost {
 	gasSchedule := customGasSchedule
 	if gasSchedule == nil {
 		gasSchedule = config.MakeGasMapForTests()
 	}
 
-	host, err := arwenHost.NewArwenVM(blockchain, &arwen.VMHostParameters{
-		VMType:                   DefaultVMType,
-		BlockGasLimit:            uint64(1000),
-		GasSchedule:              gasSchedule,
-		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
-		ElrondProtectedKeyPrefix: []byte("ELROND"),
+	host, err := hostCore.NewVMHost(blockchain, &vmhost.VMHostParameters{
+		VMType:               DefaultVMType,
+		BlockGasLimit:        uint64(1000),
+		GasSchedule:          gasSchedule,
+		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
 			IsStorageAPICostOptimizationFlagEnabledField:         true,
 			IsMultiESDTTransferFixOnCallBackFlagEnabledField:     true,

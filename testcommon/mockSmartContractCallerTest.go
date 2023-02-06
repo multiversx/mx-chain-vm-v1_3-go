@@ -3,10 +3,10 @@ package testcommon
 import (
 	"testing"
 
-	"github.com/ElrondNetwork/wasm-vm-v1_3/arwen"
-	mock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/context"
-	worldmock "github.com/ElrondNetwork/wasm-vm-v1_3/mock/world"
-	"github.com/ElrondNetwork/elrond-vm-common"
+	"github.com/multiversx/mx-chain-vm-common-go"
+	mock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
+	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
 )
 
 type testTemplateConfig struct {
@@ -19,7 +19,7 @@ type testTemplateConfig struct {
 type MockInstancesTestTemplate struct {
 	testTemplateConfig
 	contracts     *[]MockTestSmartContract
-	setup         func(arwen.VMHost, *worldmock.MockWorld)
+	setup         func(vmhost.VMHost, *worldmock.MockWorld)
 	assertResults func(*worldmock.MockWorld, *VMOutputVerifier)
 }
 
@@ -30,7 +30,7 @@ func BuildMockInstanceCallTest(t *testing.T) *MockInstancesTestTemplate {
 			t:        t,
 			useMocks: true,
 		},
-		setup: func(arwen.VMHost, *worldmock.MockWorld) {},
+		setup: func(vmhost.VMHost, *worldmock.MockWorld) {},
 	}
 }
 
@@ -47,7 +47,7 @@ func (callerTest *MockInstancesTestTemplate) WithInput(input *vmcommon.ContractC
 }
 
 // WithSetup provides the setup function to be used by the mock contract call test
-func (callerTest *MockInstancesTestTemplate) WithSetup(setup func(arwen.VMHost, *worldmock.MockWorld)) *MockInstancesTestTemplate {
+func (callerTest *MockInstancesTestTemplate) WithSetup(setup func(vmhost.VMHost, *worldmock.MockWorld)) *MockInstancesTestTemplate {
 	callerTest.setup = setup
 	return callerTest
 }
@@ -60,7 +60,7 @@ func (callerTest *MockInstancesTestTemplate) AndAssertResults(assertResults func
 
 func (callerTest *MockInstancesTestTemplate) runTest() {
 
-	host, world, imb := DefaultTestArwenForCallWithInstanceMocks(callerTest.t)
+	host, world, imb := DefaultTestVMForCallWithInstanceMocks(callerTest.t)
 
 	for _, mockSC := range *callerTest.contracts {
 		mockSC.initialize(callerTest.t, host, imb)
