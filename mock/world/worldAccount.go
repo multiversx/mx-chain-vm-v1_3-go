@@ -5,6 +5,7 @@ import (
 	"errors"
 	"math/big"
 
+	"github.com/multiversx/mx-chain-core-go/core"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/crypto/hashing"
@@ -282,4 +283,9 @@ func cloneBytes(b []byte) []byte {
 	clone := make([]byte, len(b))
 	copy(clone, b)
 	return clone
+}
+
+// MigrateDataTrieLeaves -
+func (a *Account) MigrateDataTrieLeaves(_ core.TrieNodeVersion, _ core.TrieNodeVersion, _ vmcommon.DataTrieMigrator) error {
+	return nil
 }
