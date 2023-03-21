@@ -32,7 +32,7 @@ func (a *StubAccount) AddToBalance(_ *big.Int) error {
 	panic("implement me")
 }
 
-// ClaimDeveloperRewards -k
+// ClaimDeveloperRewards -
 func (a *StubAccount) ClaimDeveloperRewards(_ []byte) (*big.Int, error) {
 	panic("implement me")
 }
