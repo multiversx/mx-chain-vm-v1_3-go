@@ -149,6 +149,8 @@ func NewVMHost(
 		wasmer.SetSIGSEGVPassthrough()
 	}
 
+	wasmer.ForceInstallSighandlers()
+
 	host.initContexts()
 
 	return host, nil
