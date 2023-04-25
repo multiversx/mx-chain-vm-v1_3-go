@@ -1,6 +1,7 @@
 package worldmock
 
 import (
+	"errors"
 	"fmt"
 
 	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
@@ -134,4 +135,9 @@ func (b *MockWorld) GetSnapshot() int {
 // RevertToSnapshot -
 func (b *MockWorld) RevertToSnapshot(snapshot int) error {
 	return b.AccountsAdapter.RevertToSnapshot(snapshot)
+}
+
+// ExecuteSmartContractCallOnOtherVM -
+func (b *MockWorld) ExecuteSmartContractCallOnOtherVM(_ *vmcommon.ContractCallInput) (*vmcommon.VMOutput, error) {
+	return nil, errors.New("not implemented")
 }
