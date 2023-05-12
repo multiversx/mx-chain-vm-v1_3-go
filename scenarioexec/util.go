@@ -7,7 +7,7 @@ import (
 
 	"github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/data/esdt"
-	"github.com/multiversx/mx-chain-vm-common-go"
+	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	er "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/expression/reconstructor"
@@ -159,7 +159,7 @@ func (ae *VMTestExecutor) convertLogToTestFormat(outputLog *vmcommon.LogEntry) *
 			outputLog.Identifier,
 			ae.exprReconstructor.Reconstruct(outputLog.Identifier,
 				er.StrHint)),
-		Data:   mj.JSONCheckBytesReconstructed(outputLog.Data, ""),
+		Data:   mj.JSONCheckBytesReconstructed(outputLog.GetFirstDataItem(), ""),
 		Topics: make([]mj.JSONCheckBytes, len(outputLog.Topics)),
 	}
 	for i, topic := range outputLog.Topics {
