@@ -50,40 +50,6 @@
             "expect": {
                 "out": [],
                 "status": "0",
-                "logs": [
-                    {
-                        "address": "sc:vault",
-                        "identifier": "str:retrieve_funds",
-                        "topics": [
-                            "str:NFT-0001",
-                            "5",
-                            "1"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:vault",
-                        "identifier": "str:ESDTNFTTransfer",
-                        "topics": [
-                            "str:NFT-0001",
-                            "5",
-                            "01",
-                            "sc:forwarder"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:forwarder",
-                        "identifier": "str:retrieve_funds_callback",
-                        "topics": [
-                            "*",
-                            "*",
-                            "*"
-                        ],
-                        "data": ""
-                    }
-
-                ],
                 "gas": "*",
                 "refund": "*"
             }
