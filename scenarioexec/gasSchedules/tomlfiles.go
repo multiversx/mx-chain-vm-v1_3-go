@@ -8,6 +8,8 @@ const (
     SaveKeyValue          = 250000
     ESDTTransfer          = 250000
     ESDTBurn              = 250000
+    TrieLoadPerNode       = 20000
+    TrieStorePerNode      = 50000
 
 [MetaChainSystemSCsCost]
     Stake               = 5000000
@@ -622,6 +624,8 @@ const (
     SaveKeyValue          = 250000
     ESDTTransfer          = 250000
     ESDTBurn              = 250000
+    TrieLoadPerNode       = 20000
+    TrieStorePerNode      = 50000
 
 [MetaChainSystemSCsCost]
     Stake               = 5000000
@@ -1234,6 +1238,8 @@ const (
     SaveKeyValue          = 250000
     ESDTTransfer          = 250000
     ESDTBurn              = 250000
+    TrieLoadPerNode       = 20000
+    TrieStorePerNode      = 50000
 
 [MetaChainSystemSCsCost]
     Stake               = 5000000
