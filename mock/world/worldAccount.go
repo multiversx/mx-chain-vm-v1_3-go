@@ -38,7 +38,7 @@ type Account struct {
 	MockWorld       *MockWorld
 }
 
-var storageDefaultValue = []byte{}
+var storageDefaultValue = make([]byte, 0)
 
 // StorageValue yields the storage value for key, default 0
 func (a *Account) StorageValue(key string) []byte {
