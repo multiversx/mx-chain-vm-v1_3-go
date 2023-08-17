@@ -54,10 +54,9 @@ func NewVMTestExecutor() (*VMTestExecutor, error) {
 		BuiltInFuncContainer: world.BuiltinFuncs.Container,
 		ProtectedKeyPrefix:   []byte(core.ProtectedKeyPrefix),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsSCDeployFlagEnabledField:            true,
-			IsAheadOfTimeGasUsageFlagEnabledField: true,
-			IsRepairCallbackFlagEnabledField:      true,
-			IsBuiltInFunctionsFlagEnabledField:    true,
+			IsFlagEnabledInCurrentEpochCalled: func(flag core.EnableEpochFlag) bool {
+				return flag == core.SCDeployFlag || flag == core.AheadOfTimeGasUsageFlag || flag == core.RepairCallbackFlag || flag == core.BuiltInFunctionsFlag
+			},
 		},
 	})
 	if err != nil {
