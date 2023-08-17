@@ -57,6 +57,10 @@ func NewVMHost(
 	if check.IfNil(hostParameters.EnableEpochsHandler) {
 		return nil, vmhost.ErrNilEnableEpochsHandler
 	}
+	err := core.CheckHandlerCompatibility(hostParameters.EnableEpochsHandler)
+	if err != nil {
+		return nil, err
+	}
 
 	cryptoHook := factory.NewVMCrypto()
 	host := &vmHost{
@@ -71,8 +75,6 @@ func NewVMHost(
 		builtInFuncContainer: hostParameters.BuiltInFuncContainer,
 		enableEpochsHandler:  hostParameters.EnableEpochsHandler,
 	}
-
-	var err error
 
 	imports, err := vmhooks.BaseOpsAPIImports()
 	if err != nil {
