@@ -99,8 +99,8 @@ func deploy(tb testing.TB, totalTokenSupply *big.Int) (vmhost.VMHost, *worldmock
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsFlagEnabledInCurrentEpochCalled: func(flag core.EnableEpochFlag) bool {
-				return flag == core.SCDeployFlag || flag == core.AheadOfTimeGasUsageFlag || flag == core.RepairCallbackFlag || flag == core.BuiltInFunctionsFlag
+			IsFlagEnabledCalled: func(flag core.EnableEpochFlag) bool {
+				return flag == hostCore.SCDeployFlag || flag == hostCore.AheadOfTimeGasUsageFlag || flag == hostCore.RepairCallbackFlag || flag == hostCore.BuiltInFunctionsFlag
 			},
 		},
 	})
