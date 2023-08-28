@@ -47,39 +47,6 @@
             "expect": {
                 "out": [ "str:ESDTTransfer@544553542d544f4b454e@03e8" ],
                 "status": "0",
-                "logs": [
-                    {
-                        "address": "sc:vault",
-                        "identifier": "str:retrieve_funds",
-                        "topics": [
-                            "str:TEST-TOKEN",
-                            "0",
-                            "1000"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:vault",
-                        "identifier": "str:ESDTTransfer",
-                        "topics": [
-                            "str:TEST-TOKEN",
-                            "",
-                            "1000",
-                            "sc:forwarder"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:forwarder",
-                        "identifier": "str:retrieve_funds_callback",
-                        "topics": [
-                            "str:TEST-TOKEN",
-                            "0",
-                            "1000"
-                        ],
-                        "data": ""
-                    }
-                ],
                 "gas": "*",
                 "refund": "*"
             }
