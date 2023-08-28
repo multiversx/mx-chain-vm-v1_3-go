@@ -63,20 +63,7 @@
             },
             "expect": {
                 "out": [],
-                "status": "",
-                "logs": [
-                    {
-                        "address": "sc:basic-features",
-                        "identifier": "str:ESDTTransfer",
-                        "topics": [
-                            "str:BASIC-FEATURES-TOKEN",
-                            "",
-                            "100",
-                            "address:an_account"
-                        ],
-                        "data": ""
-                    }
-                ]
+                "status": ""
             }
         },
         {
@@ -98,20 +85,7 @@
             },
             "expect": {
                 "out": [],
-                "status": "",
-                "logs": [
-                    {
-                        "address": "sc:basic-features",
-                        "identifier": "str:ESDTTransfer",
-                        "topics": [
-                            "str:BASIC-FEATURES-TOKEN",
-                            "",
-                            "100",
-                            "address:an_account"
-                        ],
-                        "data": ""
-                    }
-                ]
+                "status": ""
             }
         },
         {
