@@ -12,12 +12,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/multiversx/mx-chain-core-go/core"
 	"github.com/multiversx/mx-chain-core-go/data/vm"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	vmcommon "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
-	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/mock"
 	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
@@ -312,10 +313,9 @@ func DefaultTestVMWithWorldMock(tb testing.TB) (vmhost.VMHost, *worldmock.MockWo
 		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsSCDeployFlagEnabledField:            true,
-			IsAheadOfTimeGasUsageFlagEnabledField: true,
-			IsRepairCallbackFlagEnabledField:      true,
-			IsBuiltInFunctionsFlagEnabledField:    true,
+			IsFlagEnabledCalled: func(flag core.EnableEpochFlag) bool {
+				return flag == hostCore.SCDeployFlag || flag == hostCore.AheadOfTimeGasUsageFlag || flag == hostCore.RepairCallbackFlag || flag == hostCore.BuiltInFunctionsFlag
+			},
 		},
 	})
 	require.Nil(tb, err)
@@ -339,10 +339,9 @@ func DefaultTestVM(tb testing.TB, blockchain vmcommon.BlockchainHook) vmhost.VMH
 		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		UseWarmInstance:      false,
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsSCDeployFlagEnabledField:            true,
-			IsAheadOfTimeGasUsageFlagEnabledField: true,
-			IsRepairCallbackFlagEnabledField:      true,
-			IsBuiltInFunctionsFlagEnabledField:    true,
+			IsFlagEnabledCalled: func(flag core.EnableEpochFlag) bool {
+				return flag == hostCore.SCDeployFlag || flag == hostCore.AheadOfTimeGasUsageFlag || flag == hostCore.RepairCallbackFlag || flag == hostCore.BuiltInFunctionsFlag
+			},
 		},
 	})
 	require.Nil(tb, err)
@@ -363,28 +362,12 @@ func DefaultTestVMWithGasSchedule(
 	}
 
 	host, err := hostCore.NewVMHost(blockchain, &vmhost.VMHostParameters{
-		VMType:               DefaultVMType,
-		BlockGasLimit:        uint64(1000),
-		GasSchedule:          gasSchedule,
-		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
-		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
-		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsStorageAPICostOptimizationFlagEnabledField:         true,
-			IsMultiESDTTransferFixOnCallBackFlagEnabledField:     true,
-			IsFixOOGReturnCodeFlagEnabledField:                   true,
-			IsRemoveNonUpdatedStorageFlagEnabledField:            true,
-			IsCreateNFTThroughExecByCallerFlagEnabledField:       true,
-			IsManagedCryptoAPIsFlagEnabledField:                  true,
-			IsFailExecutionOnEveryAPIErrorFlagEnabledField:       true,
-			IsRefactorContextFlagEnabledField:                    true,
-			IsCheckCorrectTokenIDForTransferRoleFlagEnabledField: true,
-			IsDisableExecByCallerFlagEnabledField:                true,
-			IsESDTTransferRoleFlagEnabledField:                   true,
-			IsSendAlwaysFlagEnabledField:                         true,
-			IsGlobalMintBurnFlagEnabledField:                     true,
-			IsCheckFunctionArgumentFlagEnabledField:              true,
-			IsCheckExecuteOnReadOnlyFlagEnabledField:             true,
-		},
+		VMType:                   DefaultVMType,
+		BlockGasLimit:            uint64(1000),
+		GasSchedule:              gasSchedule,
+		BuiltInFuncContainer:     builtInFunctions.NewBuiltInFunctionContainer(),
+		ProtectedKeyPrefix:       []byte("E" + "L" + "R" + "O" + "N" + "D"),
+		EnableEpochsHandler:      &mock.EnableEpochsHandlerStub{},
 		WasmerSIGSEGVPassthrough: wasmerSIGSEGVPassthrough,
 	})
 	require.Nil(tb, err)
