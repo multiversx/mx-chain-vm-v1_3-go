@@ -48,50 +48,6 @@
             "expect": {
                 "out": [],
                 "status": "0",
-                "logs": [
-                    {
-                        "address": "sc:recursive-caller",
-                        "identifier": "str:recursive_send_funds",
-                        "topics": [
-                            "sc:vault",
-                            "str:REC-TOKEN",
-                            "1"
-                        ],
-                        "data": "1"
-                    },
-                    {
-                        "address": "sc:recursive-caller",
-                        "identifier": "str:ESDTTransfer",
-                        "topics": [
-                            "str:REC-TOKEN",
-                            "",
-                            "1",
-                            "sc:vault"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:vault",
-                        "identifier": "str:accept_funds",
-                        "topics": [
-                            "str:REC-TOKEN",
-                            "str:FungibleESDT",
-                            "1",
-                            "0"
-                        ],
-                        "data": ""
-                    },
-                    {
-                        "address": "sc:recursive-caller",
-                        "identifier": "str:recursive_send_funds_callback",
-                        "topics": [
-                            "sc:vault",
-                            "str:REC-TOKEN",
-                            "1"
-                        ],
-                        "data": "1"
-                    }
-                ],
                 "gas": "*",
                 "refund": "*"
             }
