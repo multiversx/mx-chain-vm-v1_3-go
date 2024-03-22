@@ -7,10 +7,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/multiversx/mx-chain-core-go/core"
 	vmi "github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
-	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/mock"
 	worldhook "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	mj "github.com/multiversx/mx-chain-vm-v1_3-go/scenarios/json/model"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
@@ -50,10 +51,9 @@ func newPureFunctionExecutor() (*pureFunctionExecutor, error) {
 		BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 		ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 		EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-			IsSCDeployFlagEnabledField:            true,
-			IsAheadOfTimeGasUsageFlagEnabledField: true,
-			IsRepairCallbackFlagEnabledField:      true,
-			IsBuiltInFunctionsFlagEnabledField:    true,
+			IsFlagEnabledCalled: func(flag core.EnableEpochFlag) bool {
+				return flag == hostCore.SCDeployFlag || flag == hostCore.AheadOfTimeGasUsageFlag || flag == hostCore.RepairCallbackFlag || flag == hostCore.BuiltInFunctionsFlag
+			},
 		},
 	})
 	if err != nil {
