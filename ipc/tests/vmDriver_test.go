@@ -3,16 +3,18 @@ package tests
 import (
 	"testing"
 
+	"github.com/multiversx/mx-chain-core-go/core"
 	logger "github.com/multiversx/mx-chain-logger-go"
 	"github.com/multiversx/mx-chain-vm-common-go"
 	"github.com/multiversx/mx-chain-vm-common-go/builtInFunctions"
-	"github.com/multiversx/mx-chain-vm-common-go/mock"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/config"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/common"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/ipc/nodepart"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/mock"
 	contextmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/context"
 	worldmock "github.com/multiversx/mx-chain-vm-v1_3-go/mock/world"
 	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost"
+	"github.com/multiversx/mx-chain-vm-v1_3-go/vmhost/hostCore"
 	"github.com/stretchr/testify/require"
 )
 
@@ -114,10 +116,9 @@ func newDriver(tb testing.TB, blockchain *contextmock.BlockchainHookStub) *nodep
 				ProtectedKeyPrefix:   []byte("E" + "L" + "R" + "O" + "N" + "D"),
 				BuiltInFuncContainer: builtInFunctions.NewBuiltInFunctionContainer(),
 				EnableEpochsHandler: &mock.EnableEpochsHandlerStub{
-					IsSCDeployFlagEnabledField:            true,
-					IsAheadOfTimeGasUsageFlagEnabledField: true,
-					IsRepairCallbackFlagEnabledField:      true,
-					IsBuiltInFunctionsFlagEnabledField:    true,
+					IsFlagEnabledCalled: func(flag core.EnableEpochFlag) bool {
+						return flag == hostCore.SCDeployFlag || flag == hostCore.AheadOfTimeGasUsageFlag || flag == hostCore.RepairCallbackFlag || flag == hostCore.BuiltInFunctionsFlag
+					},
 				},
 			},
 		},
